@@ -1,6 +1,7 @@
 ﻿using System;
 using Castle.DynamicProxy;
 using System.Diagnostics;
+using test.Utility;
 
 namespace test.Interceptors
 {
@@ -15,15 +16,16 @@ namespace test.Interceptors
 		public void Intercept (IInvocation invocation)
 		{
 			var methodInfo = invocation.MethodInvocationTarget;
-			Console.ForegroundColor = ConsoleColor.Cyan;
-			Debug.WriteLine ("Before : {0}.{1}()", invocation.TargetType.Name, methodInfo.Name);
-			Console.ResetColor ();
+
+			ConsoleUtility.WriteLine ("Before : {0}.{1}()", 
+			                          ConsoleColor.Cyan, 
+			                          invocation.TargetType.Name, methodInfo.Name);
 
 			invocation.Proceed ();
 
-			Console.ForegroundColor = ConsoleColor.Cyan;
-			Debug.WriteLine ("End : {0}.{1}()", invocation.TargetType.Name, methodInfo.Name);
-			Console.ResetColor ();
+			ConsoleUtility.WriteLine ("End : {0}.{1}()", 
+			                          ConsoleColor.Cyan, 
+			                          invocation.TargetType.Name, methodInfo.Name);
 		}
 
 	}

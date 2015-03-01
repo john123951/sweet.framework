@@ -12,9 +12,10 @@ namespace test.ConsoleUI
 		public void Install (IWindsorContainer container, IConfigurationStore store)
 		{
 			container.Register (Component.For<ICacheProvider> ()
-				.ImplementedBy<MemcachedCacheProvider> ()
-				.LifestyleSingleton ()
-				//.Interceptors (new []{ typeof(TraceInterceptor) })
+//								.ImplementedBy<MemcachedCacheProvider> ()
+			                    .ImplementedBy<RedisCacheProvider> ()
+								.LifestyleSingleton ()
+//								.Interceptors (new []{ typeof(TraceInterceptor) })
 			);
 		}
 	}

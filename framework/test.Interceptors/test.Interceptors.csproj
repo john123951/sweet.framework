@@ -45,6 +45,10 @@
       <Project>{6D20D177-F949-4F74-9B2D-CDDDE5716497}</Project>
       <Name>test.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\test.Utility\test.Utility.csproj">
+      <Project>{F8EE508D-5C36-42F9-BFD8-4E1F6EA4AF02}</Project>
+      <Name>test.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

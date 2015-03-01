@@ -7,7 +7,7 @@ namespace test.Infrastructure
 {
 	public class MemcachedCacheProvider : ICacheProvider
 	{
-		public object Get (string key)
+		public object Get (string key, Type valueType = null)
 		{
 			var client = GetClient ();
 
@@ -23,7 +23,7 @@ namespace test.Infrastructure
 			return result;
 		}
 
-		public void Set (string key, object value, long second = 20 * 60)
+		public void Set (string key, object value, Type valueType = null, long second = 20 * 60)
 		{
 			var client = GetClient ();
 			var expireTime = DateTime.Now.AddSeconds (second);
@@ -47,7 +47,7 @@ namespace test.Infrastructure
 		{
 			var configuration = new MemcachedClientConfiguration ();
 
-			configuration.AddServer (MemcacheConfig.HostAddress);
+			configuration.AddServer (GlobalConfig.MemcacheHost);
 
 			var client = new MemcachedClient (configuration);
 

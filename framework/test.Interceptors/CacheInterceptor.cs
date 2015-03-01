@@ -5,6 +5,7 @@ using System.Linq;
 using Castle.DynamicProxy;
 using test.Infrastructure;
 using System.Diagnostics;
+using test.Utility;
 
 namespace test.Interceptors
 {
@@ -27,17 +28,20 @@ namespace test.Interceptors
 				string[] subscribeKeys = cacheAttr.Subscribe;
 
 				//Set Subscribe Relation
-				Subscribe (keyName, subscribeKeys, invocation.Arguments);
+				if (subscribeKeys != null && subscribeKeys.Length > 0) {
+					Subscribe (keyName, subscribeKeys, invocation.Arguments);
+				}
 
 				//Get Cache Data
 				if (false == string.IsNullOrEmpty (keyName)) {
-					object value = CacheProvider.Get (keyName);
-					GetCacheData (invocation, keyName, value, expireSecond);
+					GetCacheData (invocation, keyName, expireSecond);
 					return;
 				}
 
 				//Publish
-				Publish (publishKey);
+				if (false == string.IsNullOrEmpty (publishKey)) {
+					Publish (publishKey);
+				}
 			}
 
 			invocation.Proceed ();		//Proceed
@@ -55,51 +59,50 @@ namespace test.Interceptors
 
 		static void Subscribe (string keyName, string[] subscribeKeys, object[] param)
 		{
-			if (subscribeKeys != null && subscribeKeys.Length > 0) {
-				for (int i = 0; i < subscribeKeys.Length; i++) {
-					var item = subscribeKeys [i];
-					subscribeKeys [i] = GetCacheKey (item, param);
+			for (int i = 0; i < subscribeKeys.Length; i++) {
+				var item = subscribeKeys [i];
+				subscribeKeys [i] = GetCacheKey (item, param);
+			}
+			foreach (var item in subscribeKeys) {
+				if (false == dict.ContainsKey (item)) {
+					dict [item] = new HashSet<string> ();
 				}
-				foreach (var item in subscribeKeys) {
-					if (false == dict.ContainsKey (item)) {
-						dict [item] = new HashSet<string> ();
-					}
-					var collection = dict [item];
-					collection.Add (keyName);
-				}
+				var collection = dict [item];
+				collection.Add (keyName);
 			}
 		}
 
 		void Publish (string publishKey)
 		{
-			if (false == string.IsNullOrEmpty (publishKey)) {
-				Console.ForegroundColor = ConsoleColor.Green;
-				Debug.WriteLine ("Publish Cache Key");
-				Console.ResetColor ();
-				if (dict.ContainsKey (publishKey)) {
-					var subs = dict [publishKey];
-					if (subs != null && subs.Count > 0) {
-						CacheProvider.Remove (subs.ToArray ());
-					}
+			ConsoleUtility.WriteLine ("Publish Cache Key", ConsoleColor.Green);
+
+			if (dict.ContainsKey (publishKey)) {
+				var subs = dict [publishKey];
+				if (subs != null && subs.Count > 0) {
+					CacheProvider.Remove (subs.ToArray ());
 				}
 			}
+
 		}
 
-		void GetCacheData (IInvocation invocation, string keyName, object value, int expireSecond)
+		void GetCacheData (IInvocation invocation, string keyName, int expireSecond)
 		{
+			var methodInfo = invocation.MethodInvocationTarget;
+
+			object value = CacheProvider.Get (keyName, methodInfo.ReturnType);
+
 			if (value != null && true) {
-				Console.ForegroundColor = ConsoleColor.Green;
-				Debug.WriteLine ("Get Cache Data");
-				Console.ResetColor ();
+				ConsoleUtility.WriteLine ("Get Cache Data", ConsoleColor.Green);
+
 				invocation.ReturnValue = value;
+				return;
 			} else {
-				Console.ForegroundColor = ConsoleColor.DarkRed;
-				Debug.WriteLine ("Cache not data");
-				Console.ResetColor ();
+				ConsoleUtility.WriteLine ("Cache not data", ConsoleColor.DarkRed);
+
 				invocation.Proceed ();
 				//Proceed
 				var cacheValue = invocation.ReturnValue;
-				CacheProvider.Set (keyName, cacheValue, expireSecond);
+				CacheProvider.Set (keyName, cacheValue, methodInfo.ReturnType, expireSecond);
 			}
 		}
 	}

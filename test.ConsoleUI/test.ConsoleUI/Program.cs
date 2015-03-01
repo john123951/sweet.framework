@@ -36,6 +36,10 @@ namespace test.ConsoleUI
 
 		static void Print <T> (IEnumerable<T> itor)
 		{
+			if (itor == null) {
+				Console.WriteLine ("=============================List is Null=============================");
+				return;
+			}
 			Console.WriteLine ("=============================Print=============================");
 			foreach (var item in itor) {
 				if (itor == null) {
