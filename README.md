@@ -8,3 +8,7 @@
 * 接口解耦
    * Interface Dynmic Proxy
 * 消息队列
+
+* 加密算法
+   * AES
+   * RSA
