@@ -1,8 +1,8 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System;
+using System.Reflection;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using System;
-using System.Reflection;
 
 namespace test.Utility
 {

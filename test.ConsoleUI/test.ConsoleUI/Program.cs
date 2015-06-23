@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using test.Model.Entities;
 using test.Service.Contract;
 using test.Utility;
+using test.Utility.Serialization;
 
 namespace test.ConsoleUI
 {

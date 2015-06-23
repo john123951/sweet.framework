@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace test.Infrastructure
+namespace test.Infrastructure.Attr
 {
     public sealed class CacheAttribute : Attribute
     {

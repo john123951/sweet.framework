@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using test.Utility;
+using test.Utility.Serialization;
 
 namespace test.ConsoleUI
 {

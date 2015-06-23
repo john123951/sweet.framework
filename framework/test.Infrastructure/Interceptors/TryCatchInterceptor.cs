@@ -4,7 +4,7 @@ using Castle.DynamicProxy;
 
 namespace test.Infrastructure.Interceptors
 {
-	public class LogInterceptor : IInterceptor
+	public class TryCatchInterceptor : IInterceptor
 	{
 		public void Intercept (IInvocation invocation)
 		{

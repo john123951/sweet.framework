@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace test.Utility
+namespace test.Utility.Serialization
 {
     public static class JsonUtility
     {

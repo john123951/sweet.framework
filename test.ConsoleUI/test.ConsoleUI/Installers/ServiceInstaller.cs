@@ -23,7 +23,7 @@ namespace test.ConsoleUI.Installers
                 .WithServiceDefaultInterfaces()
                 .Configure(x => x
                     .LifestyleSingleton()
-                    .Interceptors(new[] { typeof(LogInterceptor), typeof(TraceInterceptor), typeof(CacheInterceptor) })
+                    .Interceptors(new[] { typeof(TryCatchInterceptor), typeof(TraceInterceptor), typeof(CacheInterceptor) })
             ));
         }
     }

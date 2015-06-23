@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using test.Infrastructure;
+using test.Infrastructure.Attr;
 using test.Model.Entities;
 using test.Service.Contract;
 

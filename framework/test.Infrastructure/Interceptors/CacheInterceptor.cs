@@ -5,8 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Castle.DynamicProxy;
+using test.Infrastructure.Attr;
 using test.Infrastructure.Interfaces;
 using test.Utility;
+using test.Utility.Serialization;
 
 namespace test.Infrastructure.Interceptors
 {
