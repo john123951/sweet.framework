@@ -4,7 +4,7 @@ using test.UI.Model.Entities;
 
 namespace test.UI.Service.Contract
 {
-	public interface IAuthService : IMainService
+	public interface IAuthService : IService
 	{
 		List<RoleInfo> GetUserRole (long userId);
 

@@ -4,7 +4,7 @@ using test.UI.Model.Entities;
 
 namespace test.UI.Service.Contract
 {
-    public interface IProductService : IMainService
+    public interface IProductService : IService
     {
         List<ProductInfo> GetProductList(long userId, int startIndex, int endIndex, out int total);
 

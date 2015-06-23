@@ -1,7 +1,7 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using sweet.framework.Infrastructure.Cache;
+using sweet.framework.CacheProvider;
 using sweet.framework.Infrastructure.Interfaces;
 
 namespace test.UI.Console.Installers

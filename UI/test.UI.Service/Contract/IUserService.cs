@@ -4,7 +4,7 @@ using test.UI.Model.Entities;
 
 namespace test.UI.Service.Contract
 {
-    public interface IUserService : IMainService
+    public interface IUserService : IService
     {
         List<UserInfo> GetUserList();
 

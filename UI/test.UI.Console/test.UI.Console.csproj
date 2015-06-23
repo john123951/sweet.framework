@@ -50,6 +50,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\framework\sweet.framework.CacheProvider\sweet.framework.CacheProvider.csproj">
+      <Project>{7D14EFC3-3D9A-4C7D-ADC1-3EAFCA3CA552}</Project>
+      <Name>sweet.framework.CacheProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\framework\sweet.framework.Infrastructure\sweet.framework.Infrastructure.csproj">
       <Project>{6D20D177-F949-4F74-9B2D-CDDDE5716497}</Project>
       <Name>sweet.framework.Infrastructure</Name>

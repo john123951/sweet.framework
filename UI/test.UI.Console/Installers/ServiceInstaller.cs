@@ -18,7 +18,7 @@ namespace test.UI.Console.Installers
             var asm = typeof(AuthService).Assembly;
 
             container.Register(Classes.FromAssembly(asm)
-                .BasedOn<IMainService>()
+                .BasedOn<IService>()
                 .WithServiceDefaultInterfaces()
                 .Configure(x => x
                     .LifestyleSingleton()
