@@ -1,58 +1,73 @@
-﻿using System;
-using Enyim.Caching;
-using Enyim.Caching.Memcached;
+﻿using Enyim.Caching;
 using Enyim.Caching.Configuration;
+using Enyim.Caching.Memcached;
+using System;
+using test.Infrastructure.Config;
+using test.Infrastructure.Interfaces;
 
-namespace test.Infrastructure
+namespace test.Infrastructure.Cache
 {
-	public class MemcachedCacheProvider : ICacheProvider
-	{
-		public object Get (string key, Type valueType = null)
-		{
-			var client = GetClient ();
+    public class MemcachedCacheProvider : ICacheProvider
+    {
+        public object Get(string key)
+        {
+            using (var client = GetClient())
+            {
+                var result = client.Get(key);
+                return result;
+            }
+        }
 
-			var result = client.Get (key);
-			return result;
-		}
+        public T Get<T>(string key)
+             where T : class
+        {
+            using (var client = GetClient())
+            {
+                var result = client.Get<T>(key);
+                return result;
+            }
+        }
 
-		public T Get<T> (string key)
-		{
-			var client = GetClient ();
+        public void Set(string key, object value, long second = 20 * 60)
+        {
+            using (var client = GetClient())
+            {
+                var expireTime = DateTime.Now.AddSeconds(second);
 
-			var result = client.Get<T> (key);
-			return result;
-		}
+                client.Store(StoreMode.Set, key, value, expireTime);
+            }
+        }
 
-		public void Set (string key, object value, Type valueType = null, long second = 20 * 60)
-		{
-			var client = GetClient ();
-			var expireTime = DateTime.Now.AddSeconds (second);
+        public void Set<T>(string key, T value, long second = 1200)
+        {
+            Set(key, value, second);
+        }
 
-			client.Store (StoreMode.Set, key, value, expireTime);
-		}
+        public void Remove(params string[] keys)
+        {
+            if (keys == null || keys.Length <= 0)
+            {
+                return;
+            }
 
-		public void Remove (params string[] keys)
-		{
-			if (keys == null || keys.Length <= 0) {
-				return;
-			}
+            using (var client = GetClient())
+            {
+                foreach (var item in keys)
+                {
+                    client.Remove(item);
+                }
+            }
+        }
 
-			var client = GetClient ();
-			foreach (var item in keys) {
-				client.Remove (item);				
-			}
-		}
+        private MemcachedClient GetClient()
+        {
+            var configuration = new MemcachedClientConfiguration();
 
-		MemcachedClient GetClient ()
-		{
-			var configuration = new MemcachedClientConfiguration ();
+            configuration.AddServer(GlobalConfig.MemcacheHost);
 
-			configuration.AddServer (GlobalConfig.MemcacheHost);
+            var client = new MemcachedClient(configuration);
 
-			var client = new MemcachedClient (configuration);
-
-			return client;
-		}
-	}
+            return client;
+        }
+    }
 }
-

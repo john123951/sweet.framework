@@ -1,9 +1,8 @@
-﻿using System;
-using test.Model;
-using System.Collections.Generic;
-using test.Infrastructure;
+﻿using System.Collections.Generic;
+using test.Infrastructure.Interfaces;
+using test.Model.Entities;
 
-namespace test.Service
+namespace test.Service.Contract
 {
 	public interface IAuthService : IMainService
 	{

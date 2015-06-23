@@ -1,23 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.MicroKernel.SubSystems.Configuration;
-using test.Infrastructure;
-using Castle.Windsor.Installer;
-using Castle.DynamicProxy;
-using test.Interceptors;
+using Castle.Windsor;
 
-namespace test.ConsoleUI
+namespace test.ConsoleUI.Installers
 {
-	public class InterceptorInstaller : IWindsorInstaller
-	{
-		public void Install (IWindsorContainer container, IConfigurationStore store)
-		{
-			var asm = typeof(TraceInterceptor).Assembly;
-
-			container.Register (Classes.FromAssembly (asm).BasedOn<IInterceptor> ());
-		}
-	}
+    public class InterceptorInstaller : IWindsorInstaller
+    {
+        public void Install(IWindsorContainer container, IConfigurationStore store)
+        {
+            container.Register(Classes.FromAssemblyInThisApplication()
+                                       .BasedOn<IInterceptor>());
+        }
+    }
 }
-

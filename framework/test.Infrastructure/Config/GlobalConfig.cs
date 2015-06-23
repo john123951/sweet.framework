@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace test.Infrastructure
+﻿namespace test.Infrastructure.Config
 {
 	public static class GlobalConfig
 	{

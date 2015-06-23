@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using test.Model;
 using System.Linq;
 using test.Infrastructure;
+using test.Model.Entities;
+using test.Service.Contract;
 
 namespace test.Service
 {
@@ -10,7 +12,7 @@ namespace test.Service
 	{
 		static readonly List<ProductInfo> _db = new List<ProductInfo> ();
 
-		[Cache (KeyName = "GetProductList{0}", Subscribe = new []{ "AddProduct", "SetUserRole{0}" })]
+        [Cache(KeyName = "GetProductList{userId}", Subscribe = new[] { "AddProduct", "SetUserRole{userId}" })]
 		public List<ProductInfo> GetProductList (long userId, int startIndex, int endIndex, out int total)
 		{
 			total = _db.Count;

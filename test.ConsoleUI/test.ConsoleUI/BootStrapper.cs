@@ -1,17 +1,31 @@
-﻿using System;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
+﻿using System.Reflection;
+using test.Utility;
 
 namespace test.ConsoleUI
 {
-	public static class BootStrapper
-	{
-		public static readonly WindsorContainer container = new WindsorContainer ();
+    public static class BootStrapper
+    {
+        public static void Configuration()
+        {
+            ConfigureLog4Net();
+            ConfigureDependencies();
+            ConfigureMapping();
+        }
 
-		public static void Configuration ()
-		{
-			container.Install (FromAssembly.This ());
-		}
-	}
+        private static void ConfigureLog4Net()
+        {
+            //string xmlPath = HttpContext.Current.Server.MapPath("~/App_Data/Configs/log4net.config");
+            //LogUtility.Register(xmlPath);
+        }
+
+        private static void ConfigureDependencies()
+        {
+            WindsorUtility.GetInstance().Register(Assembly.GetExecutingAssembly());
+        }
+
+        private static void ConfigureMapping()
+        {
+            //Mapper.CreateMapper<listdata, ListDataDto>();
+        }
+    }
 }
-

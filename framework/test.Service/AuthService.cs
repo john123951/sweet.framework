@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using test.Model;
 using test.Infrastructure;
+using test.Model.Entities;
+using test.Service.Contract;
 
 namespace test.Service
 {
@@ -9,7 +11,7 @@ namespace test.Service
 	{
 		public static readonly Dictionary<long , List<RoleInfo>> _db = new Dictionary<long, List<RoleInfo>> ();
 
-		[Cache (KeyName = "GetUserRole{0}", Subscribe = new []{ "SetUserRole{0}" })]
+        [Cache(KeyName = "GetUserRole{userId}", Subscribe = new[] { "SetUserRole{userId}" })]
 		public List<RoleInfo> GetUserRole (long userId)
 		{
 			if (false == _db.ContainsKey (userId)) {
@@ -19,7 +21,7 @@ namespace test.Service
 			return _db [userId];
 		}
 
-		[Cache (Publish = "SetUserRole{0}")]
+        [Cache(Publish = "SetUserRole{userId}")]
 		public bool SetUserRole (long userId, List<RoleInfo> roles)
 		{
 			_db [userId] = roles;

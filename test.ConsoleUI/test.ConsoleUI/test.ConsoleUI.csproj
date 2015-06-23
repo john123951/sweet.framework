@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -49,9 +49,7 @@
     <Compile Include="BootStrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Installers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\framework\test.Model\test.Model.csproj">
       <Project>{5DBA1683-BEB5-4042-8453-750EB761EBDD}</Project>
@@ -68,10 +66,6 @@
     <ProjectReference Include="..\..\framework\test.Service\test.Service.csproj">
       <Project>{2608D30A-4C83-4DB4-AC2B-C544BCE4D656}</Project>
       <Name>test.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\framework\test.Interceptors\test.Interceptors.csproj">
-      <Project>{745DA50E-8E09-4435-A364-D3F753E9D433}</Project>
-      <Name>test.Interceptors</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
-using Castle.DynamicProxy;
 using System.Diagnostics;
+using Castle.DynamicProxy;
 
-namespace test.Interceptors
+namespace test.Infrastructure.Interceptors
 {
 	public class LogInterceptor : IInterceptor
 	{

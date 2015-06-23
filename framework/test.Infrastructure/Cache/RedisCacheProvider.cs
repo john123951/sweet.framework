@@ -1,67 +1,78 @@
-﻿using System;
-using ServiceStack.Redis;
-using test.Utility;
+﻿using ServiceStack.Redis;
+using System;
+using test.Infrastructure.Config;
+using test.Infrastructure.Interfaces;
 
-namespace test.Infrastructure
+namespace test.Infrastructure.Cache
 {
-	public class RedisCacheProvider: ICacheProvider
-	{
-		public object Get (string key, Type valueType)
-		{
-			var client = GetClient ();
+    public class RedisCacheProvider : ICacheProvider
+    {
+        private static IRedisClientsManager _clientsManager;
 
-			var strValue = client.Get<string> (key);
+        private static IRedisClient GetClient()
+        {
+            if (_clientsManager == null)
+            {
+                _clientsManager = new RedisManagerPool(GlobalConfig.RedisHost);
+            }
 
+            return _clientsManager.GetClient();
+        }
 
-			var result = JsonUtility.Deserialize (strValue, valueType);
-			return result;
-		}
+        public object Get(string key)
+        {
+            using (var client = GetClient())
+            {
+                var result = client.Get<object>(key);
 
-		public T Get<T> (string key)
-		{
-			var client = GetClient ();
+                return result;
+            }
+        }
 
-			var result = client.Get<T> (key);
-			return result;
-		}
+        public T Get<T>(string key)
+            where T : class
+        {
+            using (var client = GetClient())
+            {
+                var result = client.Get<T>(key);
+                return result;
+            }
+        }
 
-		public void Set (string key, object value, Type valueType, long second = 20 * 60)
-		{
-			var client = GetClient ();
-			var expireTime = DateTime.Now.AddSeconds (second);
+        public void Set(string key, object value, long second = 20 * 60)
+        {
+            using (var client = GetClient())
+            {
+                var expireTime = DateTime.Now.AddSeconds(second);
 
-			var strValue = JsonUtility.Serialize (value);
+                client.Set<object>(key, value, expireTime);
+            }
+        }
 
-			client.Set<object> (key, strValue, expireTime);
-		}
+        public void Set<T>(string key, T value, long second = 1200)
+        {
+            using (var client = GetClient())
+            {
+                var expireTime = DateTime.Now.AddSeconds(second);
 
-		public void Remove (params string[] keys)
-		{
-			if (keys == null || keys.Length <= 0) {
-				return;
-			}
+                client.Set<T>(key, value, expireTime);
+            }
+        }
 
-			var client = GetClient ();
-			foreach (var item in keys) {
-				client.Remove (item);				
-			}
-		}
+        public void Remove(params string[] keys)
+        {
+            if (keys == null || keys.Length <= 0)
+            {
+                return;
+            }
 
-		IRedisClientsManager GetClientsManager ()
-		{
-			var clientManager = new RedisManagerPool (GlobalConfig.RedisHost);
-
-			return clientManager;
-		}
-
-
-		IRedisClient GetClient ()
-		{
-			var clientManager = GetClientsManager ();
-
-			return clientManager.GetClient ();
-		}
-
-	}
+            using (var client = GetClient())
+            {
+                foreach (var item in keys)
+                {
+                    client.Remove(item);
+                }
+            }
+        }
+    }
 }
-

@@ -1,53 +1,43 @@
 ﻿using System;
-using ServiceStack.Text;
-using System.IO;
+using Newtonsoft.Json;
 
 namespace test.Utility
 {
-	public static class JsonUtility
-	{
-		public static string Serialize<T> (T model)
-		{
-			return JsonSerializer.SerializeToString (model);
-		}
+    public static class JsonUtility
+    {
+        static JsonUtility()
+        {
+            //Json.Net配置
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+                //DateFormatString = "yyyyMMdd"
+            };
+        }
 
-		public static string Serialize (object model)
-		{
-			if (model == null) {
-				return string.Empty;
-			}
+        public static string Serialize<T>(T model)
+        {
+            return JsonConvert.SerializeObject(model);
+        }
 
-			return JsonSerializer.SerializeToString (model, model.GetType ());
-		}
+        public static string Serialize(object model)
+        {
+            if (model == null)
+            {
+                return string.Empty;
+            }
 
-		public static T Deserialize<T> (string src)
-		{
-			if (string.IsNullOrEmpty (src)) {
-				return default(T);
-			}
+            return JsonConvert.SerializeObject(model);
+        }
 
-			return JsonSerializer.DeserializeFromString<T> (src);
-		}
+        public static T Deserialize<T>(string src)
+        {
+            return JsonConvert.DeserializeObject<T>(src);
+        }
 
-		public static object Deserialize (string src, Type type)
-		{
-			if (string.IsNullOrEmpty (src)) {
-				return null;
-			}
-
-			return JsonSerializer.DeserializeFromString (src, type);
-		}
-
-		public static void SerializeToStream<T> (T value, Stream writeStream)
-		{
-			JsonSerializer.SerializeToStream (value, writeStream);
-		}
-
-		public static object DeserializeFromStream (Type type, Stream stream)
-		{
-			var result = JsonSerializer.DeserializeFromStream (type, stream);
-			return result;
-		}
-	}
+        public static object Deserialize(string src, Type type)
+        {
+            return JsonConvert.DeserializeObject(src, type);
+        }
+    }
 }
-

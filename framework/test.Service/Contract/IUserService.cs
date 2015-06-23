@@ -1,17 +1,15 @@
-﻿using System;
-using test.Model;
-using System.Collections.Generic;
-using test.Infrastructure;
+﻿using System.Collections.Generic;
+using test.Infrastructure.Interfaces;
+using test.Model.Entities;
 
-namespace test.Service
+namespace test.Service.Contract
 {
-	public interface IUserService : IMainService
-	{
-		List<UserInfo> GetUserList ();
+    public interface IUserService : IMainService
+    {
+        List<UserInfo> GetUserList();
 
-		bool InsertUser (UserInfo userInfo);
+        bool InsertUser(UserInfo userInfo);
 
-		bool RemoveUser (long userId);
-	}
+        bool RemoveUser(long userId);
+    }
 }
-
