@@ -1,15 +1,24 @@
-﻿using System;
-using Enyim.Caching;
+﻿using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
 using sweet.framework.Infrastructure.Config;
 using sweet.framework.Infrastructure.Interfaces;
+using System;
 
 namespace sweet.framework.CacheProvider
 {
     public class MemcachedCacheProvider : ICacheProvider
     {
         public object Get(string key)
+        {
+            using (var client = GetClient())
+            {
+                var result = client.Get(key);
+                return result;
+            }
+        }
+
+        public object Get(string key, Type type)
         {
             using (var client = GetClient())
             {

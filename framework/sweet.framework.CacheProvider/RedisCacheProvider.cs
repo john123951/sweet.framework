@@ -1,7 +1,8 @@
-﻿using System;
-using ServiceStack.Redis;
+﻿using ServiceStack.Redis;
 using sweet.framework.Infrastructure.Config;
 using sweet.framework.Infrastructure.Interfaces;
+using sweet.framework.Utility.Serialization;
+using System;
 
 namespace sweet.framework.CacheProvider
 {
@@ -23,8 +24,21 @@ namespace sweet.framework.CacheProvider
         {
             using (var client = GetClient())
             {
-                var result = client.Get<object>(key);
+                var value = client.Get<object>(key);
 
+                return value;
+            }
+        }
+
+        public object Get(string key, Type type)
+        {
+            using (var client = GetClient())
+            {
+                var value = client.Get<string>(key);
+
+                if (value == null) { return null; }
+
+                var result = JsonUtility.Deserialize(value, type);
                 return result;
             }
         }
@@ -45,7 +59,8 @@ namespace sweet.framework.CacheProvider
             {
                 var expireTime = DateTime.Now.AddSeconds(second);
 
-                client.Set<object>(key, value, expireTime);
+                var strValue = JsonUtility.Serialize(value);
+                client.Set<string>(key, strValue, expireTime);
             }
         }
 

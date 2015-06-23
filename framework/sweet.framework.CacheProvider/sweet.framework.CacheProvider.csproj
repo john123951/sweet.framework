@@ -79,6 +79,10 @@
       <Project>{6d20d177-f949-4f74-9b2d-cddde5716497}</Project>
       <Name>sweet.framework.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\sweet.framework.Utility\sweet.framework.Utility.csproj">
+      <Project>{F8EE508D-5C36-42F9-BFD8-4E1F6EA4AF02}</Project>
+      <Name>sweet.framework.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

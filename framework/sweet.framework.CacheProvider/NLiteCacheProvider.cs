@@ -1,6 +1,6 @@
-﻿using System;
-using NLite.Cache;
+﻿using NLite.Cache;
 using sweet.framework.Infrastructure.Interfaces;
+using System;
 
 namespace sweet.framework.CacheProvider
 {
@@ -9,6 +9,11 @@ namespace sweet.framework.CacheProvider
         private readonly ICache _cache = CacheManager.Cache;
 
         public object Get(string key)
+        {
+            return _cache[key];
+        }
+
+        public object Get(string key, Type type)
         {
             return _cache[key];
         }

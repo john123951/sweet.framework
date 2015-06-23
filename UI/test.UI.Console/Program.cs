@@ -1,6 +1,6 @@
-﻿using System;
+﻿using sweet.framework.Utility;
+using System;
 using System.Collections.Generic;
-using sweet.framework.Utility;
 using test.UI.Model.Entities;
 using test.UI.Service.Contract;
 
@@ -12,24 +12,27 @@ namespace test.UI.Console
         {
             BootStrapper.Configuration();
 
-            var authService = WindsorUtility.GetInstance().Resolve<IAuthService>();
-            var userService = WindsorUtility.GetInstance().Resolve<IUserService>();
+            var productService = WindsorUtility.GetInstance().Resolve<IProductService>();
 
             {
-                var list = authService.GetUserRole(1);
-                Print(list);
-                authService.SetUserRole(1, new List<RoleInfo>() { new RoleInfo { Id = DateTime.Now.Millisecond, Name = "admin" } });
-                var list2 = authService.GetUserRole(1);
-                Print(list2);
-                var list3 = authService.GetUserRole(1);
-                Print(list3);
-            }
+                int total;
+                const long userId = 112;
 
-            {
-                var list = userService.GetUserList();
+                System.Console.WriteLine("GetProductList");
+                var list = productService.GetProductList(userId, 0, 5, out total);
                 Print(list);
-                userService.InsertUser(new UserInfo { Id = DateTime.Now.Millisecond, UserName = "sweet" });
-                var list2 = userService.GetUserList();
+
+                System.Console.WriteLine("InsertUser");
+                productService.AddProduct(new ProductInfo()
+                {
+                    Id = DateTime.Now.Millisecond,
+                    Name = "Book",
+                    Price = 100,
+                    UserId = userId
+                });
+
+                System.Console.WriteLine("GetProductList");
+                var list2 = productService.GetProductList(userId, 0, 5, out total);
                 Print(list2);
             }
         }

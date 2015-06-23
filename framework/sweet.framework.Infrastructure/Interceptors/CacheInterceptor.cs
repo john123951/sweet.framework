@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Castle.DynamicProxy;
+using sweet.framework.Infrastructure.Attr;
+using sweet.framework.Infrastructure.Interfaces;
+using sweet.framework.Utility.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Castle.DynamicProxy;
-using sweet.framework.Infrastructure.Attr;
-using sweet.framework.Infrastructure.Interfaces;
-using sweet.framework.Utility.Serialization;
 
 namespace sweet.framework.Infrastructure.Interceptors
 {
@@ -43,7 +43,7 @@ namespace sweet.framework.Infrastructure.Interceptors
                 //Get Cache Data
                 if (false == string.IsNullOrEmpty(keyName))
                 {
-                    object value = _cacheProvider.Get(keyName);
+                    object value = _cacheProvider.Get(keyName, invocation.Method.ReturnType);
                     GetCacheData(invocation, keyName, value, expireSecond);
                     return;
                 }
@@ -127,8 +127,7 @@ namespace sweet.framework.Infrastructure.Interceptors
                     {
                         dict[item] = new HashSet<string>();
                     }
-                    var collection = dict[item];
-                    collection.Add(keyName);
+                    dict[item].Add(keyName);
                 }
             }
         }

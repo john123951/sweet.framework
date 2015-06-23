@@ -1,8 +1,12 @@
-﻿namespace sweet.framework.Infrastructure.Interfaces
+﻿using System;
+
+namespace sweet.framework.Infrastructure.Interfaces
 {
     public interface ICacheProvider
     {
         object Get(string key);
+
+        object Get(string key, Type type);
 
         T Get<T>(string key) where T : class;
 
