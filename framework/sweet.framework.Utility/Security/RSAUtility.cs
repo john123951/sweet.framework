@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using System.Xml.Linq;
-using Org.BouncyCastle.Asn1;
+﻿using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
@@ -12,12 +7,18 @@ using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Utilities.Encoders;
 using Org.BouncyCastle.X509;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Xml.Linq;
 
-namespace sweet.framework.Utility.Security
+namespace test.Rsa.Security
 {
-    public class RSA
+    using Base64 = Org.BouncyCastle.Utilities.Encoders.Base64;
+
+    public class RSAUtility
     {
         #region 设置
 
@@ -118,12 +119,27 @@ namespace sweet.framework.Utility.Security
         public static string Encrypt(string orgData, string publicKey)
         {
             byte[] source = Encoding.GetBytes(orgData);
-            IAsymmetricBlockCipher engine = new RsaEngine();
-            AsymmetricKeyParameter publicK = PublicKeyFactory.CreateKey(Base64.Decode(publicKey));
 
-            // 此处填充方式选择部填充 NoPadding，当然模式和填充方式选择其他的，在Java端可以正确加密解密，
-            // 但是解密后的密文提交给C#端，解密的得到的数据将产生乱码
-            engine.Init(true, publicK);
+            #region NoPadding
+
+            //IAsymmetricBlockCipher engine = new RsaEngine();
+            //AsymmetricKeyParameter publicK = PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+
+            //engine.Init(true, publicK);
+
+            #endregion NoPadding
+
+            #region RSA/ECB/PKCS1Padding
+
+            RsaKeyParameters publicK = (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+
+            IAsymmetricBlockCipher engine = new Org.BouncyCastle.Crypto.Encodings.Pkcs1Encoding(new RsaEngine());//使用"RSA/ECB/PKCS1Padding"方式
+            RsaKeyParameters pubParameters = new RsaKeyParameters(false, publicK.Modulus, publicK.Exponent);
+
+            engine.Init(true, pubParameters);
+
+            #endregion RSA/ECB/PKCS1Padding
+
             int length = source.Length;
             int offset = 0;
             byte[] cache;
@@ -159,10 +175,25 @@ namespace sweet.framework.Utility.Security
         {
             byte[] encryptData = Base64.Decode(encryptString.Trim());
 
-            IAsymmetricBlockCipher engine = new RsaEngine();
-            AsymmetricKeyParameter priKey = PrivateKeyFactory.CreateKey(Base64.Decode(privateKey));
+            #region NoPadding
 
-            engine.Init(false, priKey);
+            //IAsymmetricBlockCipher engine = new RsaEngine();
+            //AsymmetricKeyParameter priKey = PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
+
+            //engine.Init(false, priKey);
+
+            #endregion NoPadding
+
+            #region RSA/ECB/PKCS1Padding
+
+            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
+
+            IAsymmetricBlockCipher engine = new RsaEngine();
+            RsaKeyParameters priParameters = new RsaPrivateCrtKeyParameters(priKey.Modulus, priKey.PublicExponent, priKey.Exponent, priKey.P, priKey.Q, priKey.DP, priKey.DQ, priKey.QInv);
+
+            engine.Init(false, priParameters);
+
+            #endregion RSA/ECB/PKCS1Padding
 
             //分段解密 解决加密密文过长问题
             int length = encryptData.Length;
@@ -201,7 +232,7 @@ namespace sweet.framework.Utility.Security
         /// <param name="publickey"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static string XMLEncrypt(string publickey, string content)
+        public static string XMLEncrypt(string content, string publickey)
         {
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(publickey);
@@ -217,7 +248,7 @@ namespace sweet.framework.Utility.Security
         /// <param name="privateKey"></param>
         /// <param name="encryptString"></param>
         /// <returns></returns>
-        public static string XMLDecrypt(string privateKey, string encryptString)
+        public static string XMLDecrypt(string encryptString, string privateKey)
         {
             byte[] encryptData = Base64.Decode(encryptString.Trim());
 
@@ -242,6 +273,7 @@ namespace sweet.framework.Utility.Security
         {
             byte[] data = Base64.Decode(dataToBeSigned);
             var rsa = new RSACryptoServiceProvider();
+            //RSA私钥
             RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Base64.Decode(privateKey));
             var p = new RSAParameters
             {
@@ -270,6 +302,7 @@ namespace sweet.framework.Utility.Security
         /// <returns></returns>
         public static bool VerifySignature(string signature, string signedData, string publicKey)
         {
+            //RSA公钥
             RsaKeyParameters publicK = (RsaKeyParameters)PublicKeyFactory.CreateKey(Base64.Decode(publicKey));
 
             var rsa = new RSACryptoServiceProvider();

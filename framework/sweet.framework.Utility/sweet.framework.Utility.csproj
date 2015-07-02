@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AES.cs" />
-    <Compile Include="Security\RSA.cs" />
+    <Compile Include="Security\RSAUtility.cs" />
     <Compile Include="Serialization\FormSerializer.cs" />
     <Compile Include="Serialization\JsonUtility.cs" />
     <Compile Include="WindsorUtility.cs" />
