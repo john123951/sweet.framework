@@ -5,8 +5,10 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Utilities.Encoders;
 using Org.BouncyCastle.X509;
 using System;
 using System.IO;
@@ -14,10 +16,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
-namespace test.Rsa.Security
+namespace sweet.framework.Utility.Security
 {
-    using Base64 = Org.BouncyCastle.Utilities.Encoders.Base64;
-
     public class RSAUtility
     {
         #region 设置
@@ -108,7 +108,7 @@ namespace test.Rsa.Security
 
         #endregion 生成密钥对
 
-        #region 加解密
+        #region 加密解密
 
         /// <summary>
         /// 数据加密处理
@@ -137,6 +137,16 @@ namespace test.Rsa.Security
             RsaKeyParameters pubParameters = new RsaKeyParameters(false, publicK.Modulus, publicK.Exponent);
 
             engine.Init(true, pubParameters);
+
+            #endregion RSA/ECB/PKCS1Padding
+
+            #region RSA/ECB/PKCS1Padding
+
+            //RsaKeyParameters publicK = (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+            //RsaKeyParameters pubParameters = new RsaKeyParameters(false, publicK.Modulus, publicK.Exponent);
+
+            //IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");
+            //engine.Init(true, pubParameters);
 
             #endregion RSA/ECB/PKCS1Padding
 
@@ -192,6 +202,16 @@ namespace test.Rsa.Security
             RsaKeyParameters priParameters = new RsaPrivateCrtKeyParameters(priKey.Modulus, priKey.PublicExponent, priKey.Exponent, priKey.P, priKey.Q, priKey.DP, priKey.DQ, priKey.QInv);
 
             engine.Init(false, priParameters);
+
+            #endregion RSA/ECB/PKCS1Padding
+
+            #region RSA/ECB/PKCS1Padding
+
+            //RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
+            //RsaKeyParameters priParameters = new RsaPrivateCrtKeyParameters(priKey.Modulus, priKey.PublicExponent, priKey.Exponent, priKey.P, priKey.Q, priKey.DP, priKey.DQ, priKey.QInv);
+
+            //IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");
+            //engine.Init(false, priParameters);
 
             #endregion RSA/ECB/PKCS1Padding
 
@@ -259,9 +279,27 @@ namespace test.Rsa.Security
             return result;
         }
 
-        #endregion 加解密
+        #endregion 加密解密
 
         #region 加签、验签
+
+        /// <summary>
+        /// 加签 sign the data
+        /// </summary>
+        /// <param name="dataToBeSigned">要加签的数据</param>
+        /// <param name="xmlPrivateKey">XML私钥</param>
+        /// <returns></returns>
+        public static string SignDataMicrosoft(string dataToBeSigned, string xmlPrivateKey)
+        {
+            byte[] data = Convert.FromBase64String(dataToBeSigned);
+
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(xmlPrivateKey);
+
+            byte[] endata = rsa.SignData(data, typeof(SHA1));
+
+            return Convert.ToBase64String(endata);
+        }
 
         /// <summary>
         /// 加签 sign the data
@@ -271,81 +309,17 @@ namespace test.Rsa.Security
         /// <returns></returns>
         public static string SignData(string dataToBeSigned, string privateKey)
         {
-            byte[] data = Base64.Decode(dataToBeSigned);
-            var rsa = new RSACryptoServiceProvider();
-            //RSA私钥
-            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Base64.Decode(privateKey));
-            var p = new RSAParameters
-            {
-                Modulus = priKey.Modulus.ToByteArrayUnsigned(),
-                Exponent = priKey.PublicExponent.ToByteArrayUnsigned(),
-                D = priKey.Exponent.ToByteArrayUnsigned(),
-                P = priKey.P.ToByteArrayUnsigned(),
-                Q = priKey.Q.ToByteArrayUnsigned(),
-                DP = priKey.DP.ToByteArrayUnsigned(),
-                DQ = priKey.DQ.ToByteArrayUnsigned(),
-                InverseQ = priKey.QInv.ToByteArrayUnsigned(),
-            };
-            rsa.ImportParameters(p);
+            byte[] data = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(dataToBeSigned);
 
-            byte[] endata = rsa.SignData(data, typeof(SHA1));
+            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
 
-            return Encoding.GetString(Base64.Encode(endata));
-        }
+            ISigner verifier = SignerUtilities.GetSigner("SHA-1withRSA");
+            verifier.Init(true, priKey);
 
-        /// <summary>
-        /// 验签 Verifies the signature for a given data.
-        /// </summary>
-        /// <param name="signature"> 要验证的签名（Base64）</param>
-        /// <param name="signedData">签名前的原始数据（Base64）</param>
-        /// <param name="publicKey">公钥(BASE64编码)</param>
-        /// <returns></returns>
-        public static bool VerifySignature(string signature, string signedData, string publicKey)
-        {
-            //RSA公钥
-            RsaKeyParameters publicK = (RsaKeyParameters)PublicKeyFactory.CreateKey(Base64.Decode(publicKey));
+            verifier.BlockUpdate(data, 0, data.Length);
+            var sigBytes = verifier.GenerateSignature();
 
-            var rsa = new RSACryptoServiceProvider();
-            var rsaKeyInfo = new RSAParameters
-            {
-                Modulus = publicK.Modulus.ToByteArrayUnsigned(),
-                Exponent = publicK.Exponent.ToByteArrayUnsigned(),
-            };
-            rsa.ImportParameters(rsaKeyInfo);
-
-            byte[] buffer = Base64.Decode(signedData);
-            byte[] sign = Base64.Decode(signature);
-            // 参数:
-            //   buffer:
-            //     已签名的数据。
-            //
-            //   halg:
-            //     用于创建数据的哈希值的哈希算法名称。
-            //
-            //   signature:
-            //     要验证的签名数据。
-            if (rsa.VerifyData(buffer, typeof(SHA1), sign))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 加签 sign the data
-        /// </summary>
-        /// <param name="dataToBeSigned">要加签的数据</param>
-        /// <param name="xmlContent">私钥</param>
-        /// <returns></returns>
-        public static string SignDataByXml(string dataToBeSigned, string xmlContent)
-        {
-            byte[] data = Base64.Decode(dataToBeSigned);
-            var rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(xmlContent);
-            byte[] endata = rsa.SignData(data, typeof(SHA1));
-
-            return Encoding.GetString(Base64.Encode(endata));
+            return Encoding.GetString(Org.BouncyCastle.Utilities.Encoders.Base64.Encode(sigBytes));
         }
 
         /// <summary>
@@ -406,7 +380,140 @@ namespace test.Rsa.Security
             return false;
         }
 
+        /// <summary>
+        /// 加签 sign the data
+        /// </summary>
+        /// <param name="signature"> 要验证的签名数据（Base64）</param>
+        /// <param name="signedData">签名前的原始数据（Base64）</param>
+        /// <param name="xmlPublicKey">XML公钥</param>
+        /// <returns></returns>
+        public static bool VerifySignatureMicrosoft(string signature, string signedData, string xmlPublicKey)
+        {
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(xmlPublicKey);
+
+            byte[] buffer = Base64.Decode(signedData);
+            byte[] sign = Base64.Decode(signature);
+
+            // 参数:
+            //   buffer:
+            //     已签名的数据。
+            //
+            //   halg:
+            //     用于创建数据的哈希值的哈希算法名称。
+            //
+            //   signature:
+            //     要验证的签名数据。
+            return rsa.VerifyData(buffer, typeof(SHA1), sign);
+        }
+
+        /// <summary>
+        /// 验签
+        /// </summary>
+        /// <param name="signature"> 要验证的签名数据（Base64）</param>
+        /// <param name="signedData">签名前的原始数据（Base64）</param>
+        /// <param name="publicKey">公钥</param>
+        /// <returns></returns>
+        public static bool VerifySignature(string signature, string signedData, string publicKey)
+        {
+            byte[] sign = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(signature);
+            byte[] buffer = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(signedData);
+
+            AsymmetricKeyParameter publicK = PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+
+            ISigner verifier = SignerUtilities.GetSigner("SHA-1withRSA");
+            verifier.Init(false, publicK);
+
+            verifier.BlockUpdate(buffer, 0, buffer.Length);
+
+            return verifier.VerifySignature(sign);
+        }
+
         #endregion 加签、验签
+
+        #region XML与Base64转换
+
+        public static string PrivateKeyXmlToBase64(string xmlPrivateKey)
+        {
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(xmlPrivateKey);
+
+            var priKey = rsa.ExportParameters(true);
+            RsaPrivateCrtKeyParameters bcPriKey = new RsaPrivateCrtKeyParameters(
+                new BigInteger(1, priKey.Modulus),
+                new BigInteger(1, priKey.Exponent),
+                new BigInteger(1, priKey.D),
+                new BigInteger(1, priKey.P),
+                new BigInteger(1, priKey.Q),
+                new BigInteger(1, priKey.DP),
+                new BigInteger(1, priKey.DQ),
+                new BigInteger(1, priKey.InverseQ));
+
+            PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(bcPriKey);
+            Asn1Object asn1ObjectPrivate = privateKeyInfo.ToAsn1Object();
+            byte[] privateInfoByte = asn1ObjectPrivate.GetEncoded();
+
+            return Convert.ToBase64String(privateInfoByte);
+        }
+
+        public static string PrivateKeyBase64ToXml(string base64PrivateKey)
+        {
+            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PrivateKey));
+
+            var p = new RSAParameters
+            {
+                Modulus = priKey.Modulus.ToByteArrayUnsigned(),
+                Exponent = priKey.PublicExponent.ToByteArrayUnsigned(),
+                D = priKey.Exponent.ToByteArrayUnsigned(),
+                P = priKey.P.ToByteArrayUnsigned(),
+                Q = priKey.Q.ToByteArrayUnsigned(),
+                DP = priKey.DP.ToByteArrayUnsigned(),
+                DQ = priKey.DQ.ToByteArrayUnsigned(),
+                InverseQ = priKey.QInv.ToByteArrayUnsigned(),
+            };
+
+            var rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(p);
+
+            return rsa.ToXmlString(true);
+        }
+
+        public static string PublicKeyXmlToBase64(string xmlPublicKey)
+        {
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(xmlPublicKey);
+
+            var pubKey = rsa.ExportParameters(false);
+
+            var bcPubKey = new RsaKeyParameters(false,
+                                                new BigInteger(1, pubKey.Modulus),
+                                                new BigInteger(1, pubKey.Exponent)
+                                                );
+
+            SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(bcPubKey);
+            Asn1Object asn1ObjectPublic = subjectPublicKeyInfo.ToAsn1Object();
+            byte[] publicInfoByte = asn1ObjectPublic.GetEncoded();
+
+            return Convert.ToBase64String(publicInfoByte);
+        }
+
+        public static string PublicKeyBase64ToXml(string base64PublicKey)
+        {
+            RsaKeyParameters pubKey = (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PublicKey));
+
+            var p = new RSAParameters
+            {
+                Modulus = pubKey.Modulus.ToByteArrayUnsigned(),
+                Exponent = pubKey.Exponent.ToByteArrayUnsigned(),
+            };
+
+            var rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(p);
+
+            return rsa.ToXmlString(false);
+        }
+
+        #endregion XML与Base64转换
 
         /// <summary>
         /// 解决PHP Base64编码后回车问题
