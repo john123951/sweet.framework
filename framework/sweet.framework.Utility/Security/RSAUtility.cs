@@ -47,7 +47,7 @@ namespace sweet.framework.Utility.Security
         /// 生成密钥对
         /// </summary>
         /// <param name="directoryPath">生成目录</param>
-        public static void GenneratRsaKey(string directoryPath)
+        public static void GenerateRsaKey(string directoryPath)
         {
             if (string.IsNullOrEmpty(directoryPath))
             {
