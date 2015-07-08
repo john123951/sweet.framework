@@ -35,12 +35,17 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attr\RetryAttribute.cs" />
+    <Compile Include="RemoteInvoker.cs" />
     <Compile Include="Interceptors\CacheInterceptor.cs" />
+    <Compile Include="Interceptors\RemoteInvokeInterceptor.cs" />
+    <Compile Include="Interceptors\RetryInterceptor.cs" />
     <Compile Include="Interceptors\TryCatchInterceptor.cs" />
     <Compile Include="Interceptors\TraceInterceptor.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IRespository.cs" />
     <Compile Include="Model\ApiResponse.cs" />
+    <Compile Include="Model\BaseEntity.cs" />
     <Compile Include="Model\ResultHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\ICacheProvider.cs" />

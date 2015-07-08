@@ -2,6 +2,9 @@
 
 namespace sweet.framework.Infrastructure.Attr
 {
+    /// <summary>
+    /// 标识启用缓存机制
+    /// </summary>
     public sealed class CacheAttribute : Attribute
     {
         public CacheAttribute()

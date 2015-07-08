@@ -18,7 +18,7 @@ namespace test.UI.Service
             return _db.Where(x => x.UserId == userId).ToList();
         }
 
-        [Cache(Publish = "AddProduct{productInfo.UserId}")]
+        [Cache(Publish = "AddProduct{productInfo.UserId}")] //No Cache ,Only Publish
         public ProductInfo AddProduct(ProductInfo productInfo)
         {
             _db.Add(productInfo);

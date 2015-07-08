@@ -3,6 +3,9 @@ using Castle.DynamicProxy;
 
 namespace sweet.framework.Infrastructure.Interceptors
 {
+    /// <summary>
+    /// 记录方法执行时间 拦截器
+    /// </summary>
     public class TraceInterceptor : IInterceptor
     {
         public void Intercept(IInvocation invocation)
