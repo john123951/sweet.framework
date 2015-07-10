@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace sweet.framework.Utility.Generattion
+namespace sweet.framework.Utility.Generation.IdWorker
 {
     public class IdWorkerGenerator
     {

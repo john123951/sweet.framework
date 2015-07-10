@@ -1,5 +1,5 @@
 ﻿using sweet.framework.Infrastructure.Interfaces;
-using sweet.framework.Utility.Generattion;
+using sweet.framework.Utility.Generation.IdWorker;
 
 namespace sweet.framework.Infrastructure.Model
 {
