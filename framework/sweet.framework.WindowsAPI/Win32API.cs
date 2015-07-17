@@ -8,17 +8,8 @@ namespace sweet.framework.WindowsAPI
     /// <summary>
     /// Windows API Functions
     /// </summary>
-    public class Win32API
+    public static class Win32API
     {
-        #region .ctor()
-
-        // No need to construct this object
-        private Win32API()
-        {
-        }
-
-        #endregion .ctor()
-
         #region Constans values
 
         public const string TOOLBARCLASSNAME = "ToolbarWindow32";
@@ -123,6 +114,73 @@ namespace sweet.framework.WindowsAPI
 
         #region User32.dll functions
 
+        #region sweet append
+
+        /// <summary>
+        /// 获取鼠标位置
+        /// </summary>
+        /// <param name="lpPoint"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(ref Point lpPoint);
+
+        /// <summary>
+        /// 设置鼠标位置
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        public static extern bool SetCursorPos(int x, int y);
+
+        /// <summary>
+        /// 设置鼠标按键和动作
+        /// Win32API.mouse_event(MouseEventFlag.Absolute | MouseEventFlag.Move, 500 * 65536 / 1024, 50 * 65536 / 1024, 0, UIntPtr.Zero);
+        /// </summary>
+        /// <param name="dwFlags"> MouseEventFlag.Absolute | MouseEventFlag.Move </param>
+        /// <param name="dx"> X * 65536 / 1024 </param>
+        /// <param name="dy"> Y * 65536 / 768 </param>
+        /// <param name="data"> 0 </param>
+        /// <param name="extraInfo">UIntPtr.Zero</param>
+        [DllImport("user32.dll")]
+        public static extern void mouse_event(MouseEventFlag dwFlags, int dx, int dy, uint data, UIntPtr extraInfo); //UIntPtr指针多句柄类型
+
+        [DllImport("user32.dll", EntryPoint = "FindWindow", CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string className, string captionName);
+
+        /// <summary>
+        /// 该函数获取一个窗口句柄,该窗口雷鸣和窗口名与给定字符串匹配 hwnParent=Null从桌面窗口查找
+        /// </summary>
+        /// <param name="hwndParent"></param>
+        /// <param name="hwndChildAfter"></param>
+        /// <param name="strClass"></param>
+        /// <param name="strWindow"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", EntryPoint = "FindWindowEx", CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string strClass, string strWindow);
+
+        [DllImport("user32", EntryPoint = "WindowFromPoint")]
+        public static extern int WindowFromPoint(int xPoint, int yPoint);
+
+        /// <summary>
+        /// 是获取当前系统中被激活的窗口.
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("user32.dll", EntryPoint = "GetForegroundWindow")]
+        public static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
+        /// 只是获取当前程序中(严格地说是线程中)被激活的窗口;
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetActiveWindow();
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(HandleRef hwnd, out RECT rect);
+
+        #endregion sweet append
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr GetDC(IntPtr hWnd);
 
@@ -139,6 +197,7 @@ namespace sweet.framework.WindowsAPI
         static public extern bool UpdateWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         static public extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]

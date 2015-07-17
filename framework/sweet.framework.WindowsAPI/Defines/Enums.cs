@@ -1,3 +1,5 @@
+using System;
+
 namespace sweet.framework.WindowsAPI.Defines
 {
     /// <summary>
@@ -1609,4 +1611,68 @@ namespace sweet.framework.WindowsAPI.Defines
     }
 
     #endregion List View Notifications
+
+    #region Mouse Event
+
+    /// <summary>
+    /// 设置鼠标动作的键值
+    /// </summary>
+    [Flags]
+    public enum MouseEventFlag : uint
+    {
+        /// <summary>
+        /// 发生移动
+        /// </summary>
+        Move = 0x0001,
+
+        /// <summary>
+        /// 鼠标按下左键
+        /// </summary>
+        LeftDown = 0x0002,
+
+        /// <summary>
+        /// 鼠标松开左键
+        /// </summary>
+        LeftUp = 0x0004,
+
+        /// <summary>
+        /// 鼠标按下右键
+        /// </summary>
+        RightDown = 0x0008,
+
+        /// <summary>
+        /// 鼠标松开右键
+        /// </summary>
+        RightUp = 0x0010,
+
+        /// <summary>
+        /// 鼠标按下中键
+        /// </summary>
+        MiddleDown = 0x0020,
+
+        /// <summary>
+        /// 鼠标松开中键
+        /// </summary>
+        MiddleUp = 0x0040,
+
+        XDown = 0x0080,
+        XUp = 0x0100,
+
+        /// <summary>
+        /// 鼠标轮被移动
+        /// </summary>
+        Wheel = 0x0800,
+
+        /// <summary>
+        /// 虚拟桌面
+        /// </summary>
+        VirtualDesk = 0x4000,
+
+        /// <summary>
+        /// 采用绝对坐标
+        /// </summary>
+        Absolute = 0x8000
+    }
+
+    #endregion Mouse Event
 }

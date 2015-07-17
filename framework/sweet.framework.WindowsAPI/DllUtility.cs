@@ -79,8 +79,7 @@ namespace sweet.framework.WindowsAPI
                 AssemblyName asmName = new AssemblyName();
                 asmName.Name = "DynamicAssembly";
 
-                AssemblyBuilder asmBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(asmName,
-                    AssemblyBuilderAccess.Run);
+                AssemblyBuilder asmBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(asmName, AssemblyBuilderAccess.Run);
                 ModuleBuilder modBuilder = asmBuilder.DefineDynamicModule("DynamicModule");
 
                 Type resultType = (result == typeof(void) ? typeof(void) : result.GetType());
