@@ -39,5 +39,11 @@
   <ItemGroup>
     <Folder Include="Enums\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\framework\sweet.framework.Utility\sweet.framework.Utility.csproj">
+      <Project>{f8ee508d-5c36-42f9-bfd8-4e1f6ea4af02}</Project>
+      <Name>sweet.framework.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

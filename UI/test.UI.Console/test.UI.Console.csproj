@@ -32,12 +32,12 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Castle.Windsor">
-      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="Castle.Core">
-      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +65,10 @@
     <ProjectReference Include="..\test.UI.Model\test.UI.Model.csproj">
       <Project>{5dba1683-beb5-4042-8453-750eb761ebdd}</Project>
       <Name>test.UI.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\test.UI.Respository\test.UI.Respository.csproj">
+      <Project>{5f32bbd2-ab12-4af9-a09f-5a8a80795346}</Project>
+      <Name>test.UI.Respository</Name>
     </ProjectReference>
     <ProjectReference Include="..\test.UI.Service\test.UI.Service.csproj">
       <Project>{2608D30A-4C83-4DB4-AC2B-C544BCE4D656}</Project>

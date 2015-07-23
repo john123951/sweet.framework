@@ -42,6 +42,20 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\framework\sweet.framework.Infrastructure\sweet.framework.Infrastructure.csproj">
+      <Project>{6d20d177-f949-4f74-9b2d-cddde5716497}</Project>
+      <Name>sweet.framework.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\framework\sweet.framework.Utility\sweet.framework.Utility.csproj">
+      <Project>{f8ee508d-5c36-42f9-bfd8-4e1f6ea4af02}</Project>
+      <Name>sweet.framework.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\test.UI.Model\test.UI.Model.csproj">
+      <Project>{5dba1683-beb5-4042-8453-750eb761ebdd}</Project>
+      <Name>test.UI.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
