@@ -20,9 +20,10 @@ namespace test.UI.Console.Installers
             container.Register(Classes.FromAssembly(asm)
                 .BasedOn<IService>()
                 .WithServiceDefaultInterfaces()
+                .WithServiceFirstInterface()
                 .Configure(x => x
                     .LifestyleSingleton()
-                    .Interceptors(new[] { typeof(TryCatchInterceptor), typeof(TraceInterceptor), typeof(CacheInterceptor) })
+                    .Interceptors(new[] { typeof(TraceInterceptor), typeof(CacheInterceptor) })
             ));
         }
     }
