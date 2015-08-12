@@ -70,7 +70,17 @@ namespace sweet.framework.Utility
                 dataStream.Write(byteArray, 0, byteArray.Length);
             }
 
-            return GetResponse(request);
+            return GetResponse(request, encoding);
+        }
+
+        /// <summary>
+        /// 发送一个HttpGet请求
+        /// </summary>
+        /// <param name="address">远程地址</param>
+        /// <returns></returns>
+        public static string Get(string address)
+        {
+            return Get(address, null, Encoding.UTF8);
         }
 
         /// <summary>
@@ -78,8 +88,9 @@ namespace sweet.framework.Utility
         /// </summary>
         /// <param name="address">远程地址</param>
         /// <param name="modify">供修改的回调函数</param>
+        /// <param name="encoding">编码</param>
         /// <returns></returns>
-        public static string Get(string address, Action<HttpWebRequest> modify = null)
+        public static string Get(string address, Action<HttpWebRequest> modify, Encoding encoding)
         {
             var request = WebRequest.Create(address) as HttpWebRequest;
             Debug.Assert(request != null, "request != null");
@@ -92,7 +103,7 @@ namespace sweet.framework.Utility
                 modify(request);
             }
 
-            return GetResponse(request);
+            return GetResponse(request, encoding);
         }
 
         /// <summary>
@@ -147,12 +158,12 @@ namespace sweet.framework.Utility
         /// </summary>
         /// <param name="request">需要发送的请求</param>
         /// <returns></returns>
-        private static string GetResponse(HttpWebRequest request)
+        private static string GetResponse(HttpWebRequest request, Encoding encoding)
         {
             using (var response = request.GetResponse())
             using (var stream = response.GetResponseStream())
             {
-                using (var reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream, encoding))
                 {
                     return reader.ReadToEnd();
                 }
