@@ -151,6 +151,7 @@ namespace sweet.framework.Utility
         {
             request.ContentType = "application/json;charset=UTF-8";
             request.Accept = "application/json";
+            request.AllowAutoRedirect = false;
         }
 
         /// <summary>

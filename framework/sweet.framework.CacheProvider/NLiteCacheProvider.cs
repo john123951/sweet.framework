@@ -23,14 +23,14 @@ namespace sweet.framework.CacheProvider
             return _cache[key] as T;
         }
 
-        public void Set(string key, object value, long second = 1200)
+        public void Set(string key, object value, long second)
         {
             _cache.Insert(key, value, DateTime.Now.AddSeconds(second), TimeSpan.Zero);
         }
 
         public void Set<T>(string key, T value, long second = 1200)
         {
-            Set(key, value, second);
+            Set(key, (object)value, second);
         }
 
         public void Remove(params string[] keys)
