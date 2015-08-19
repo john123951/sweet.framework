@@ -1,16 +1,14 @@
-﻿//#define PKCS1Padding
+﻿#define PKCS1Padding
 
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Utilities.Encoders;
 using Org.BouncyCastle.X509;
 using System;
 using System.IO;
@@ -158,7 +156,7 @@ namespace sweet.framework.Utility.Security
             IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");
             engine.Init(true, pubParameters);
 #else
-            IAsymmetricBlockCipher engine = new RsaEngine();
+            IAsymmetricBlockCipher engine = new Org.BouncyCastle.Crypto.Engines.RsaEngine();
             AsymmetricKeyParameter publicK = PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
             engine.Init(true, publicK);
 #endif
@@ -244,7 +242,7 @@ namespace sweet.framework.Utility.Security
             IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");
             engine.Init(false, priParameters);
 #else
-            IAsymmetricBlockCipher engine = new RsaEngine();
+            IAsymmetricBlockCipher engine = new Org.BouncyCastle.Crypto.Engines.RsaEngine();
             AsymmetricKeyParameter priKey = PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
 
             engine.Init(false, priKey);
@@ -402,8 +400,8 @@ namespace sweet.framework.Utility.Security
             var rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(xmlPublicKey);
 
-            byte[] buffer = Base64.Decode(signedData);
-            byte[] sign = Base64.Decode(signature);
+            byte[] buffer = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(signedData);
+            byte[] sign = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(signature);
 
             // 参数:
             //   buffer:
