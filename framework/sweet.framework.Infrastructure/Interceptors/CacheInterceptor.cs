@@ -166,7 +166,12 @@ namespace sweet.framework.Infrastructure.Interceptors
             //Proceed
             invocation.Proceed();
             var cacheValue = invocation.ReturnValue;
-            _cacheProvider.Set(keyName, cacheValue, expireSecond);
+
+            //Cache
+            if (cacheValue != null)
+            {
+                _cacheProvider.Set(keyName, cacheValue, expireSecond);
+            }
 
             Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Cache not data");
             return false;

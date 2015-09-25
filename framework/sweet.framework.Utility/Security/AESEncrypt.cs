@@ -64,7 +64,7 @@ namespace sweet.framework.Utility.Security
             aes.KeySize = 256;
 
             // It is equal in java
-            /// Cipher _Cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            // Cipher _Cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
 

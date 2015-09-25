@@ -42,9 +42,10 @@ namespace sweet.framework.Utility.Extention
         /// 判断对象各个公有属性是否为空
         /// </summary>
         /// <param name="instance"></param>
-        public static void ThrowIfPropertyIsEmpty(this object instance)
+        /// <param name="message"></param>
+        public static void ThrowIfPropertyIsEmpty(this object instance, string message)
         {
-            instance.ThrowIfNull("instance");
+            instance.ThrowIfNull(message);
 
             Type type = instance.GetType();
             var props = type.GetProperties();
@@ -53,23 +54,23 @@ namespace sweet.framework.Utility.Extention
             {
                 if (propertyInfo.PropertyType == typeof(int) || propertyInfo.PropertyType == typeof(int?))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToInt32((object)x) == default(int), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToInt32((object)x) == default(int), instance, message);
                 }
                 else if (propertyInfo.PropertyType == typeof(string))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => String.IsNullOrEmpty(x.ToString()), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => String.IsNullOrEmpty(x.ToString()), instance, message);
                 }
                 else if (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToDateTime((object)x) == default(DateTime), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToDateTime((object)x) == default(DateTime), instance, message);
                 }
                 else if (propertyInfo.PropertyType == typeof(short) || propertyInfo.PropertyType == typeof(short?))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToInt16((object)x) == default(short), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToInt16((object)x) == default(short), instance, message);
                 }
                 else if (propertyInfo.PropertyType == typeof(decimal) || propertyInfo.PropertyType == typeof(decimal?))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToDecimal((object)x) == default(decimal), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToDecimal((object)x) == default(decimal), instance, message);
                 }
                 //else if (propertyInfo.PropertyType == typeof(bool) || propertyInfo.PropertyType == typeof(bool?))
                 //{
@@ -77,11 +78,11 @@ namespace sweet.framework.Utility.Extention
                 //}
                 else if (propertyInfo.PropertyType == typeof(byte) || propertyInfo.PropertyType == typeof(byte?))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToByte((object)x) == default(byte), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToByte((object)x) == default(byte), instance, message);
                 }
                 else if (propertyInfo.PropertyType == typeof(long) || propertyInfo.PropertyType == typeof(long?))
                 {
-                    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToInt64((object)x) == default(long), instance);
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToInt64((object)x) == default(long), instance, message);
                 }
                 else
                 {
@@ -90,18 +91,18 @@ namespace sweet.framework.Utility.Extention
             }
         }
 
-        private static void PropertyValueIsNotEmpty(this PropertyInfo propertyInfo, Func<object, bool> isEmpty, object instance)
+        private static void ThrowIfPropertyIsEmpty(this PropertyInfo propertyInfo, Func<object, bool> isEmpty, object instance, string message)
         {
             var value = propertyInfo.GetValue(instance, null);
 
             if (value == null)
             {
-                throw new ArgumentException(propertyInfo.ReflectedType + " -- " + propertyInfo.Name + " is null");
+                throw new ArgumentException(message + ": " + propertyInfo.ReflectedType + " -- " + propertyInfo.Name + " is null");
             }
 
             if (isEmpty(value))
             {
-                throw new ArgumentException(propertyInfo.ReflectedType + " -- " + propertyInfo.Name + " is empty");
+                throw new ArgumentException(message + ": " + propertyInfo.ReflectedType + " -- " + propertyInfo.Name + " is empty");
             }
         }
     }

@@ -10,6 +10,8 @@ namespace test.UI.Console
     {
         public static void Main(string[] args)
         {
+            System.Console.WriteLine(ReflectionUtility.GetCurrentMethodName());
+
             BootStrapper.Configuration();
 
             var productService = WindsorUtility.GetInstance().Resolve<IProductService>();

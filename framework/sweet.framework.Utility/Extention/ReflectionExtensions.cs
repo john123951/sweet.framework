@@ -25,11 +25,23 @@ namespace sweet.framework.Utility.Extention
             return (!type.IsInterface && !type.IsAbstract && !type.IsValueType);
         }
 
+        /// <summary>
+        /// 获取所有公有属性
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static PropertyInfo[] GetPublicInstanceProperties(this Type type)
         {
             return type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.SetField);
         }
 
+        /// <summary>
+        /// 为公有属性设置值
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="value">值</param>
+        /// <param name="instance"></param>
         public static void SetPropertyValueFromString(this Type type, string propertyName, string value, object instance)
         {
             var property = type.GetProperty(propertyName);

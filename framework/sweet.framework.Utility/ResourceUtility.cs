@@ -20,7 +20,7 @@ namespace sweet.framework.Utility
             using (Stream stream = ReadStream(resourceName))
             using (var reader = new StreamReader(stream, encoding))
             {
-                var data = reader.ReadToEnd();
+                string data = reader.ReadToEnd();
                 return data;
             }
         }
@@ -35,7 +35,7 @@ namespace sweet.framework.Utility
             //读取嵌入式资源
             Assembly asm = Assembly.GetCallingAssembly();
 
-            //当前程序集的名称，不是很准确，不是命名空间名称
+            //当前程序集的名称(不是很准确，命名空间名称)
             string fullName = asm.GetName().Name + @"." + resourceName;
 
             Stream stream = asm.GetManifestResourceStream(fullName);

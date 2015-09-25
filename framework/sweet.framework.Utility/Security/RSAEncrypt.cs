@@ -53,11 +53,12 @@ namespace sweet.framework.Utility.Security
             }
 
             RsaKeyPairGenerator rsaKeyPairGenerator = new RsaKeyPairGenerator();
-            RsaKeyGenerationParameters rsaKeyGenerationParameters = new RsaKeyGenerationParameters(Org.BouncyCastle.Math.BigInteger.ValueOf(3), new SecureRandom(), 2048, 25);
-            rsaKeyPairGenerator.Init(rsaKeyGenerationParameters);//初始化参数
+            RsaKeyGenerationParameters rsaKeyGenerationParameters =
+                new RsaKeyGenerationParameters(Org.BouncyCastle.Math.BigInteger.ValueOf(3), new SecureRandom(), 2048, 25);
+            rsaKeyPairGenerator.Init(rsaKeyGenerationParameters); //初始化参数
             AsymmetricCipherKeyPair keyPair = rsaKeyPairGenerator.GenerateKeyPair();
-            AsymmetricKeyParameter publicKey = keyPair.Public;//公钥
-            AsymmetricKeyParameter privateKey = keyPair.Private;//私钥
+            AsymmetricKeyParameter publicKey = keyPair.Public; //公钥
+            AsymmetricKeyParameter privateKey = keyPair.Private; //私钥
 
             SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
             PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
@@ -150,7 +151,9 @@ namespace sweet.framework.Utility.Security
             #endregion RSA/ECB/PKCS1Padding
 
 #if PKCS1Padding
-            RsaKeyParameters publicK = (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+            RsaKeyParameters publicK =
+                (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)
+                    PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
             RsaKeyParameters pubParameters = new RsaKeyParameters(false, publicK.Modulus, publicK.Exponent);
 
             IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");
@@ -236,8 +239,11 @@ namespace sweet.framework.Utility.Security
 
 #if PKCS1Padding
 
-            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
-            RsaKeyParameters priParameters = new RsaPrivateCrtKeyParameters(priKey.Modulus, priKey.PublicExponent, priKey.Exponent, priKey.P, priKey.Q, priKey.DP, priKey.DQ, priKey.QInv);
+            RsaPrivateCrtKeyParameters priKey =
+                (RsaPrivateCrtKeyParameters)
+                    PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
+            RsaKeyParameters priParameters = new RsaPrivateCrtKeyParameters(priKey.Modulus, priKey.PublicExponent,
+                priKey.Exponent, priKey.P, priKey.Q, priKey.DP, priKey.DQ, priKey.QInv);
 
             IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");
             engine.Init(false, priParameters);
@@ -319,7 +325,9 @@ namespace sweet.framework.Utility.Security
         {
             byte[] data = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(dataToBeSigned);
 
-            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
+            RsaPrivateCrtKeyParameters priKey =
+                (RsaPrivateCrtKeyParameters)
+                    PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(privateKey));
 
             ISigner verifier = SignerUtilities.GetSigner("SHA-1withRSA");
             verifier.Init(true, priKey);
@@ -427,7 +435,8 @@ namespace sweet.framework.Utility.Security
             byte[] sign = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(signature);
             byte[] buffer = Org.BouncyCastle.Utilities.Encoders.Base64.Decode(signedData);
 
-            AsymmetricKeyParameter publicK = PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+            AsymmetricKeyParameter publicK =
+                PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
 
             ISigner verifier = SignerUtilities.GetSigner("SHA-1withRSA");
             verifier.Init(false, publicK);
@@ -466,7 +475,9 @@ namespace sweet.framework.Utility.Security
 
         public static string PrivateKeyBase64ToXml(string base64PrivateKey)
         {
-            RsaPrivateCrtKeyParameters priKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PrivateKey));
+            RsaPrivateCrtKeyParameters priKey =
+                (RsaPrivateCrtKeyParameters)
+                    PrivateKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PrivateKey));
 
             var p = new RSAParameters
             {
@@ -494,9 +505,9 @@ namespace sweet.framework.Utility.Security
             var pubKey = rsa.ExportParameters(false);
 
             var bcPubKey = new RsaKeyParameters(false,
-                                                new BigInteger(1, pubKey.Modulus),
-                                                new BigInteger(1, pubKey.Exponent)
-                                                );
+                new BigInteger(1, pubKey.Modulus),
+                new BigInteger(1, pubKey.Exponent)
+                );
 
             SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(bcPubKey);
             Asn1Object asn1ObjectPublic = subjectPublicKeyInfo.ToAsn1Object();
@@ -507,7 +518,9 @@ namespace sweet.framework.Utility.Security
 
         public static string PublicKeyBase64ToXml(string base64PublicKey)
         {
-            RsaKeyParameters pubKey = (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PublicKey));
+            RsaKeyParameters pubKey =
+                (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)
+                    PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PublicKey));
 
             var p = new RSAParameters
             {
@@ -558,6 +571,30 @@ namespace sweet.framework.Utility.Security
             }
 
             return sbResult.ToString();
+        }
+
+        /// <summary>
+        /// 获取php生成的私钥
+        /// </summary>
+        /// <param name="base64PriKey"></param>
+        private static RsaKeyParameters GetPhpPrivateKey(string base64PriKey)
+        {
+            Stream stream = new MemoryStream(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(base64PriKey));
+
+            var privKeyObj = Asn1Object.FromStream(stream);
+            var privStruct = new RsaPrivateKeyStructure((Asn1Sequence)privKeyObj);
+            RsaKeyParameters priParameters = new RsaPrivateCrtKeyParameters(
+                new BigInteger(1, privStruct.Modulus.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.PublicExponent.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.PrivateExponent.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.Prime1.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.Prime2.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.Exponent1.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.Exponent2.ToByteArrayUnsigned()),
+                new BigInteger(1, privStruct.Coefficient.ToByteArrayUnsigned())
+                );
+
+            return priParameters;
         }
     }
 }
