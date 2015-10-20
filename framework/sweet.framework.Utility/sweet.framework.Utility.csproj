@@ -70,8 +70,9 @@
     <Compile Include="ResourceUtility.cs" />
     <Compile Include="Security\AESEncrypt.cs" />
     <Compile Include="Security\Base64Utility.cs" />
-    <Compile Include="Security\Md5Encrypt.cs" />
+    <Compile Include="Security\Md5Digest.cs" />
     <Compile Include="Security\RSAEncrypt.cs" />
+    <Compile Include="Security\SM3Digest.cs" />
     <Compile Include="Serialization\FormSerializer.cs" />
     <Compile Include="Serialization\JsonUtility.cs" />
     <Compile Include="Serialization\XmlUtility.cs" />

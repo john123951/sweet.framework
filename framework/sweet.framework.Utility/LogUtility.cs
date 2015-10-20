@@ -3,17 +3,17 @@ using System;
 
 namespace sweet.framework.Utility
 {
-    public enum Log4NetType
-    {
-        Debug,
-        Info,
-        Warn,
-        Error,
-        Fatal,
-    }
-
     public class LogUtility
     {
+        public enum Log4NetType
+        {
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Fatal,
+        }
+
         private static LogUtility _instance;
 
         #region 构造函数

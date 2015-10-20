@@ -72,6 +72,10 @@ namespace sweet.framework.Utility.Extention
                 {
                     propertyInfo.ThrowIfPropertyIsEmpty(x => Convert.ToDecimal((object)x) == default(decimal), instance, message);
                 }
+                else if (propertyInfo.PropertyType == typeof(bool?))
+                {
+                    propertyInfo.ThrowIfPropertyIsEmpty(x => false, instance, message);
+                }
                 //else if (propertyInfo.PropertyType == typeof(bool) || propertyInfo.PropertyType == typeof(bool?))
                 //{
                 //    propertyInfo.PropertyValueIsNotEmpty(x => Convert.ToBoolean(x) == default(bool), instance);
@@ -100,7 +104,7 @@ namespace sweet.framework.Utility.Extention
                 throw new ArgumentException(message + ": " + propertyInfo.ReflectedType + " -- " + propertyInfo.Name + " is null");
             }
 
-            if (isEmpty(value))
+            if (isEmpty != null && isEmpty(value))
             {
                 throw new ArgumentException(message + ": " + propertyInfo.ReflectedType + " -- " + propertyInfo.Name + " is empty");
             }

@@ -1,6 +1,8 @@
 ﻿using sweet.framework.Utility;
+using sweet.framework.Utility.Extention;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
 using test.UI.Model.Entities;
@@ -12,12 +14,29 @@ namespace test.UI.Console
     {
         public static void Main(string[] args)
         {
+            TestGetDescriptionTime();
             BootStrapper.Configuration();
 
             System.Console.WriteLine(ReflectionUtility.GetCurrentMethodName());
 
             //TestProductService();
             //TestDynamicLinq();
+        }
+
+        private static void TestGetDescriptionTime()
+        {
+            var status = test.UI.Model.Enums.StatusEnum.Loading;
+
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            for (int i = 0; i < 100000; i++)
+            {
+                status.GetDescription();
+            }
+            stopWatch.Stop();
+            System.Console.WriteLine("耗时：{0}ms", stopWatch.ElapsedMilliseconds);
+
+            System.Console.ReadLine();
         }
 
         private static void TestDynamicLinq()

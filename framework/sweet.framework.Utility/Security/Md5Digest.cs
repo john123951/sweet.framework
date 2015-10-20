@@ -8,16 +8,16 @@ namespace sweet.framework.Utility.Security
     /// 获取唯一特征串，可用于密码加密
     /// (无法还原)
     /// </summary>
-    public class Md5Encrypt
+    public class Md5Digest
     {
         /// <summary>
         /// MD5 16位加密
         /// </summary>
         /// <param name="inputString">输入文本</param>
         /// <returns></returns>
-        public static string GetEncryptString_16(string inputString)
+        public static string EncryptString_16(string inputString)
         {
-            return GetEncryptString_16(inputString, Encoding.UTF8);
+            return EncryptString_16(inputString, Encoding.UTF8);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace sweet.framework.Utility.Security
         /// <param name="inputString">输入文本</param>
         /// <param name="encoding">字符编码</param>
         /// <returns></returns>
-        public static string GetEncryptString_16(string inputString, System.Text.Encoding encoding)
+        public static string EncryptString_16(string inputString, System.Text.Encoding encoding)
         {
             System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();//实例化一个md5对像
             return BitConverter.ToString(md5.ComputeHash(encoding.GetBytes(inputString)), 4, 8).Replace("-", "").ToLower();
@@ -37,9 +37,9 @@ namespace sweet.framework.Utility.Security
         /// </summary>
         /// <param name="inputString"></param>
         /// <returns></returns>
-        public static string GetEncryptString_32(string inputString)
+        public static string EncryptString_32(string inputString)
         {
-            return GetEncryptString_32(inputString, System.Text.Encoding.UTF8);
+            return EncryptString_32(inputString, System.Text.Encoding.UTF8);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace sweet.framework.Utility.Security
         /// <param name="inputString">输入文本</param>
         /// <param name="encoding">字符编码</param>
         /// <returns></returns>
-        public static string GetEncryptString_32(string inputString, System.Text.Encoding encoding)
+        public static string EncryptString_32(string inputString, System.Text.Encoding encoding)
         {
             string pwd = string.Empty;
             System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();//实例化一个md5对像
@@ -70,9 +70,9 @@ namespace sweet.framework.Utility.Security
         /// </summary>
         /// <param name="inputString">输入文本</param>
         /// <returns></returns>
-        public static string GetEncryptString(string inputString)
+        public static string EncryptString(string inputString)
         {
-            return GetEncryptString(inputString, System.Text.Encoding.UTF8);
+            return EncryptString(inputString, System.Text.Encoding.UTF8);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace sweet.framework.Utility.Security
         /// <param name="inputString">输入文本</param>
         /// <param name="encoding">字符编码</param>
         /// <returns></returns>
-        public static string GetEncryptString(string inputString, System.Text.Encoding encoding)
+        public static string EncryptString(string inputString, System.Text.Encoding encoding)
         {
             System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
             return BitConverter.ToString(md5.ComputeHash(encoding.GetBytes(inputString))).Replace("-", "").ToLower();

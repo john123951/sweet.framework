@@ -9,6 +9,16 @@ namespace sweet.framework.Utility.Security
     public static class Base64Utility
     {
         /// <summary>
+        /// Base64编码，采用utf8编码方式编码
+        /// </summary>
+        /// <param name="source">待编码的明文</param>
+        /// <returns>编码后的字符串</returns>
+        public static string EncodeBase64(string source)
+        {
+            return EncodeBase64(source, Encoding.UTF8);
+        }
+
+        /// <summary>
         /// Base64编码
         /// </summary>
         /// <param name="source">待编码的明文</param>
@@ -23,16 +33,6 @@ namespace sweet.framework.Utility.Security
         /// <summary>
         /// Base64编码，采用utf8编码方式编码
         /// </summary>
-        /// <param name="source">待编码的明文</param>
-        /// <returns>编码后的字符串</returns>
-        public static string EncodeBase64(string source)
-        {
-            return EncodeBase64(source, Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Base64编码，采用utf8编码方式编码
-        /// </summary>
         /// <param name="bytes">待编码的明文</param>
         /// <returns>编码后的字符串</returns>
         public static string EncodeBase64(byte[] bytes)
@@ -41,82 +41,45 @@ namespace sweet.framework.Utility.Security
         }
 
         /// <summary>
-        /// Base64编码
+        /// Base64解码，采用utf8编码方式解码
         /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static byte[] EncodeBase64_byte(string source)
+        /// <param name="base64Data">待解码的密文</param>
+        /// <returns>解码后的字符串</returns>
+        public static string DecodeBase64(string base64Data)
         {
-            int modeX = source.Length % 4;
-            if (modeX != 0)
-            {
-                for (int i = 0; i < 4 - modeX; i++)
-                {
-                    source = source + "=";
-                }
-            }
-
-            byte[] bytes = Encoding.UTF8.GetBytes(source);
-
-            return bytes;
+            return DecodeBase64(base64Data, Encoding.UTF8);
         }
 
         /// <summary>
         /// Base64解码
         /// </summary>
-        /// <param name="result">待解码的密文</param>
+        /// <param name="base64Data">待解码的密文</param>
         /// <param name="encoding">解码采用的编码方式，注意和编码时采用的方式一致</param>
         /// <returns>解码后的字符串</returns>
-        public static string DecodeBase64(string result, Encoding encoding)
+        public static string DecodeBase64(string base64Data, Encoding encoding)
         {
-            string decode;
-            byte[] bytes = Convert.FromBase64String(result);
+            byte[] bytes = DecodeBase64_byte(base64Data);
+            string rawData = encoding.GetString(bytes);
 
-            try
-            {
-                decode = encoding.GetString(bytes);
-            }
-            catch
-            {
-                decode = result;
-            }
-            return decode;
-        }
-
-        /// <summary>
-        /// Base64解码，采用utf8编码方式解码
-        /// </summary>
-        /// <param name="result">待解码的密文</param>
-        /// <returns>解码后的字符串</returns>
-        public static string DecodeBase64(string result)
-        {
-            int modeX = result.Length % 4;
-            if (modeX != 0)
-            {
-                for (int i = 0; i < 4 - modeX; i++)
-                {
-                    result = result + "=";
-                }
-            }
-            return DecodeBase64(result, Encoding.UTF8);
+            return rawData;
         }
 
         /// <summary>
         /// Base64解码 ///
         /// </summary>
-        /// <param name="result"></param>
+        /// <param name="base64Data"></param>
         /// <returns></returns>
-        public static byte[] DecodeBase64_byte(string result)
+        public static byte[] DecodeBase64_byte(string base64Data)
         {
-            int modeX = result.Length % 4;
+            int modeX = base64Data.Length % 4;
             if (modeX != 0)
             {
                 for (int i = 0; i < 4 - modeX; i++)
                 {
-                    result = result + "=";
+                    base64Data = base64Data + "=";
                 }
             }
-            byte[] bytes = Convert.FromBase64String(result);
+            byte[] bytes = Convert.FromBase64String(base64Data);
             return bytes;
         }
     }

@@ -19,7 +19,7 @@ namespace sweet.framework.Utility
         }
 
         /// <summary>
-        /// 返回当前调用的方法名
+        /// 返回当前调用的属性名
         /// </summary>
         /// <returns></returns>
         public static string GetCurrentPropertyName()

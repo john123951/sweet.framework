@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -10,8 +9,6 @@ namespace sweet.framework.Utility.Extention
     /// </summary>
     public static class EnumExtention
     {
-        private static readonly Dictionary<RuntimeTypeHandle, FieldInfo[]> CacheFieldInfo = new Dictionary<RuntimeTypeHandle, FieldInfo[]>();
-
         /// <summary>
         /// 获取枚举值的详细文本[Description]
         /// </summary>
@@ -21,21 +18,11 @@ namespace sweet.framework.Utility.Extention
         {
             if (targetEnum == null) { return string.Empty; }
 
-            Type t = targetEnum.GetType();
-            var typeHandle = t.TypeHandle;
-            string strTarget = Enum.GetName(t, targetEnum); //target.ToString();
+            Type type = targetEnum.GetType();
+            string strTarget = Enum.GetName(type, targetEnum); //target.ToString();
 
             //获取字段信息
-            System.Reflection.FieldInfo[] arrFieldInfo;
-            if (CacheFieldInfo.ContainsKey(typeHandle))
-            {
-                arrFieldInfo = CacheFieldInfo[typeHandle];
-            }
-            else
-            {
-                arrFieldInfo = t.GetFields();
-                CacheFieldInfo[typeHandle] = arrFieldInfo;
-            }
+            System.Reflection.FieldInfo[] arrFieldInfo = type.GetFields();
 
             for (int i = arrFieldInfo.Length - 1; i >= 0; i--)
             {
