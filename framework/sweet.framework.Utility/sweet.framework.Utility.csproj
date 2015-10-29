@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugUtility.cs" />
+    <Compile Include="Extention\DateTimeExtention.cs" />
     <Compile Include="Extention\DynamicLinqExtention.cs" />
     <Compile Include="Extention\EnumExtention.cs" />
     <Compile Include="Extention\LinqExtentions.cs" />

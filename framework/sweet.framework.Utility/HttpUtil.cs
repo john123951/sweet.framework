@@ -9,8 +9,11 @@ using System.Text;
 
 namespace sweet.framework.Utility
 {
+
     /// <summary>
     /// Http通用类
+    /// 常用http请求头
+    /// "application/x-www-form-urlencoded"
     /// </summary>
     public static class HttpUtil
     {
