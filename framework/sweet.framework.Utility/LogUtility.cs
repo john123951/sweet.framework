@@ -1,11 +1,12 @@
 ﻿using log4net;
 using System;
+using System.Diagnostics;
 
 namespace sweet.framework.Utility
 {
     public class LogUtility
     {
-        public enum Log4NetType
+        public enum LogType
         {
             Debug,
             Info,
@@ -19,7 +20,11 @@ namespace sweet.framework.Utility
         #region 构造函数
 
         private LogUtility()
+        { }
+
+        static LogUtility()
         {
+            LogUtility.Register();
         }
 
         public static LogUtility GetInstance()
@@ -37,7 +42,7 @@ namespace sweet.framework.Utility
 
         public static void Register()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            log4net.Config.BasicConfigurator.Configure();
             _instance = new LogUtility();
         }
 
@@ -49,30 +54,30 @@ namespace sweet.framework.Utility
 
         #endregion 注册
 
-        public void WriteLog(string logName, Log4NetType type, string message)
+        public void WriteLog(string logName, LogType type, string message)
         {
             var logger = LogManager.GetLogger(logName);
 
             Action<string> action = null;
             switch (type)
             {
-                case Log4NetType.Debug:
+                case LogType.Debug:
                     action = logger.Debug;
                     break;
 
-                case Log4NetType.Info:
+                case LogType.Info:
                     action = logger.Info;
                     break;
 
-                case Log4NetType.Warn:
+                case LogType.Warn:
                     action = logger.Warn;
                     break;
 
-                case Log4NetType.Error:
+                case LogType.Error:
                     action = logger.Error;
                     break;
 
-                case Log4NetType.Fatal:
+                case LogType.Fatal:
                     action = logger.Fatal;
                     break;
 
@@ -83,30 +88,30 @@ namespace sweet.framework.Utility
             if (action != null) { action(message); }
         }
 
-        public void WriteLog(string logName, Log4NetType type, string message, Exception exception)
+        public void WriteLog(string logName, LogType type, string message, Exception exception)
         {
             var logger = LogManager.GetLogger(logName);
 
             Action<string, Exception> action = null;
             switch (type)
             {
-                case Log4NetType.Debug:
+                case LogType.Debug:
                     action = logger.Debug;
                     break;
 
-                case Log4NetType.Info:
+                case LogType.Info:
                     action = logger.Info;
                     break;
 
-                case Log4NetType.Warn:
+                case LogType.Warn:
                     action = logger.Warn;
                     break;
 
-                case Log4NetType.Error:
+                case LogType.Error:
                     action = logger.Error;
                     break;
 
-                case Log4NetType.Fatal:
+                case LogType.Fatal:
                     action = logger.Fatal;
                     break;
 
@@ -115,6 +120,22 @@ namespace sweet.framework.Utility
             }
 
             if (action != null) { action(message, exception); }
+        }
+
+        public void Debug(string msg, params object[] args)
+        {
+            var targetType = new StackFrame(1).GetMethod().DeclaringType;
+
+            var logger = LogManager.GetLogger(targetType.Name);
+            logger.Debug(string.Format(msg, args));
+        }
+
+        public void Info(string msg, params object[] args)
+        {
+            var targetType = new StackFrame(1).GetMethod().DeclaringType;
+
+            var logger = LogManager.GetLogger(targetType.Name);
+            logger.Info(string.Format(msg, args));
         }
     }
 }

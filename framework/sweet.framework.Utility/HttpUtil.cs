@@ -9,7 +9,6 @@ using System.Text;
 
 namespace sweet.framework.Utility
 {
-
     /// <summary>
     /// Http通用类
     /// 常用http请求头
@@ -59,6 +58,7 @@ namespace sweet.framework.Utility
 
             PackRequestHeaders(request);
             request.Method = "POST";
+            //request.Proxy = new WebProxy("127.0.0.1", 8888);
 
             if (modify != null)
             {

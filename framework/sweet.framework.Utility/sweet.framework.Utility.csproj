@@ -61,12 +61,14 @@
     <Compile Include="Extention\LinqExtentions.cs" />
     <Compile Include="Extention\ObjectExtention.cs" />
     <Compile Include="Extention\ReflectionExtensions.cs" />
+    <Compile Include="Extention\StringExtention.cs" />
     <Compile Include="Generation\IdWorker\DisposableAction.cs" />
     <Compile Include="Generation\IdWorker\IdWorkerGenerator.cs" />
     <Compile Include="Generation\IdWorker\SystemFunction.cs" />
     <Compile Include="HttpUtil.cs" />
     <Compile Include="LogUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocol\SocketClient.cs" />
     <Compile Include="ReflectionUtility.cs" />
     <Compile Include="ResourceUtility.cs" />
     <Compile Include="Security\AESEncrypt.cs" />

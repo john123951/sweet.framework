@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attr\RetryAttribute.cs" />
+    <Compile Include="Interceptors\InvokeInterceptor.cs" />
     <Compile Include="RemoteInvoker.cs" />
     <Compile Include="Interceptors\CacheInterceptor.cs" />
     <Compile Include="Interceptors\RemoteInvokeInterceptor.cs" />

@@ -9,21 +9,21 @@ namespace sweet.framework.Utility
     /// </summary>
     public static class ResourceUtility
     {
-        /// <summary>
-        /// 以文本格式读取程序集中嵌入的资源
-        /// </summary>
-        /// <param name="resourceName"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static string ReadString(string resourceName, Encoding encoding)
-        {
-            using (Stream stream = ReadStream(resourceName))
-            using (var reader = new StreamReader(stream, encoding))
-            {
-                string data = reader.ReadToEnd();
-                return data;
-            }
-        }
+        ///// <summary>
+        ///// 以文本格式读取程序集中嵌入的资源
+        ///// </summary>
+        ///// <param name="resourceName"></param>
+        ///// <param name="encoding"></param>
+        ///// <returns></returns>
+        //public static string ReadString(string resourceName, Encoding encoding)
+        //{
+        //    using (Stream stream = ReadStream(resourceName))
+        //    using (var reader = new StreamReader(stream, encoding))
+        //    {
+        //        string data = reader.ReadToEnd();
+        //        return data;
+        //    }
+        //}
 
         /// <summary>
         /// 读取程序集中嵌入的资源
