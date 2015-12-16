@@ -13,12 +13,13 @@ namespace sweet.framework.Infrastructure.Interceptors
 {
     /// <summary>
     /// 缓存 拦截器
+    /// 请继承此类，重写CanCache()方法
     /// </summary>
     public class CacheInterceptor : IInterceptor
     {
         private readonly ICacheProvider _cacheProvider;
 
-        private static readonly Dictionary<string, HashSet<string>> dict = new Dictionary<string, HashSet<string>>();
+        private static readonly Dictionary<string, HashSet<string>> subscribeDict = new Dictionary<string, HashSet<string>>();
 
         public CacheInterceptor(ICacheProvider cacheProvider)
         {
@@ -124,11 +125,11 @@ namespace sweet.framework.Infrastructure.Interceptors
                 }
                 foreach (var item in subscribeKeys)
                 {
-                    if (false == dict.ContainsKey(item))
+                    if (false == subscribeDict.ContainsKey(item))
                     {
-                        dict[item] = new HashSet<string>();
+                        subscribeDict[item] = new HashSet<string>();
                     }
-                    dict[item].Add(keyName);
+                    subscribeDict[item].Add(keyName);
                 }
             }
         }
@@ -137,9 +138,9 @@ namespace sweet.framework.Infrastructure.Interceptors
         {
             if (string.IsNullOrEmpty(publishKey)) { return false; }
 
-            if (dict.ContainsKey(publishKey))
+            if (subscribeDict.ContainsKey(publishKey))
             {
-                var subs = dict[publishKey];
+                var subs = subscribeDict[publishKey];
                 if (subs != null && subs.Count > 0)
                 {
                     _cacheProvider.Remove(subs.ToArray());
@@ -165,16 +166,21 @@ namespace sweet.framework.Infrastructure.Interceptors
 
             //Proceed
             invocation.Proceed();
-            var cacheValue = invocation.ReturnValue;
+            var returnValue = invocation.ReturnValue;
 
             //Cache
-            if (cacheValue != null)
+            if (CanCache(returnValue))
             {
-                _cacheProvider.Set(keyName, cacheValue, expireSecond);
+                _cacheProvider.Set(keyName, returnValue, expireSecond);
             }
 
             Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Cache not data");
             return false;
+        }
+
+        protected virtual bool CanCache(object returnValue)
+        {
+            return returnValue != null;
         }
     }
 }
