@@ -34,9 +34,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attr\RetryAttribute.cs" />
+    <Compile Include="Config\AppSettingsConfigManager.cs" />
     <Compile Include="Interceptors\InvokeInterceptor.cs" />
     <Compile Include="RemoteInvoker.cs" />
     <Compile Include="Interceptors\CacheInterceptor.cs" />

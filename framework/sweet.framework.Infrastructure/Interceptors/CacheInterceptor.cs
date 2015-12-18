@@ -19,7 +19,7 @@ namespace sweet.framework.Infrastructure.Interceptors
     {
         private readonly ICacheProvider _cacheProvider;
 
-        private static readonly Dictionary<string, HashSet<string>> subscribeDict = new Dictionary<string, HashSet<string>>();
+        private static readonly Dictionary<string, HashSet<string>> dict = new Dictionary<string, HashSet<string>>();
 
         public CacheInterceptor(ICacheProvider cacheProvider)
         {
@@ -45,16 +45,31 @@ namespace sweet.framework.Infrastructure.Interceptors
                 Subscribe(keyName, subscribeKeys, invocation);
 
                 //Get Cache Data
-                if (GetCacheData(invocation, keyName, expireSecond))
+                if (HasGetCacheData(invocation, keyName, expireSecond))
                 {
                     return;
                 }
+                else
+                {
+                    Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Cache not data");
 
-                //Publish
-                if (Publish(publishKey)) { Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Publish Cache Key"); }
+                    //Proceed
+                    invocation.Proceed();
+                    var returnValue = invocation.ReturnValue;
+
+                    //Cache
+                    if (CanCache(returnValue))
+                    {
+                        _cacheProvider.Set(keyName, returnValue, expireSecond);
+                    }
+
+                    //Publish
+                    if (Publish(publishKey)) { Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Publish Cache Key"); }
+                }
+                return;
             }
 
-            //else ,Proceed
+            //normal ,Proceed
             invocation.Proceed();
         }
 
@@ -125,11 +140,11 @@ namespace sweet.framework.Infrastructure.Interceptors
                 }
                 foreach (var item in subscribeKeys)
                 {
-                    if (false == subscribeDict.ContainsKey(item))
+                    if (false == dict.ContainsKey(item))
                     {
-                        subscribeDict[item] = new HashSet<string>();
+                        dict[item] = new HashSet<string>();
                     }
-                    subscribeDict[item].Add(keyName);
+                    dict[item].Add(keyName);
                 }
             }
         }
@@ -138,9 +153,9 @@ namespace sweet.framework.Infrastructure.Interceptors
         {
             if (string.IsNullOrEmpty(publishKey)) { return false; }
 
-            if (subscribeDict.ContainsKey(publishKey))
+            if (dict.ContainsKey(publishKey))
             {
-                var subs = subscribeDict[publishKey];
+                var subs = dict[publishKey];
                 if (subs != null && subs.Count > 0)
                 {
                     _cacheProvider.Remove(subs.ToArray());
@@ -150,7 +165,7 @@ namespace sweet.framework.Infrastructure.Interceptors
             return false;
         }
 
-        private bool GetCacheData(IInvocation invocation, string keyName, int expireSecond)
+        private bool HasGetCacheData(IInvocation invocation, string keyName, int expireSecond)
         {
             if (false == string.IsNullOrEmpty(keyName))
             {
@@ -158,23 +173,11 @@ namespace sweet.framework.Infrastructure.Interceptors
 
                 if (value != null)
                 {
-                    invocation.ReturnValue = value;
                     Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Get Cache Data");
+                    invocation.ReturnValue = value;
                     return true;
                 }
             }
-
-            //Proceed
-            invocation.Proceed();
-            var returnValue = invocation.ReturnValue;
-
-            //Cache
-            if (CanCache(returnValue))
-            {
-                _cacheProvider.Set(keyName, returnValue, expireSecond);
-            }
-
-            Debug.WriteLine(invocation.TargetType.Name + "." + invocation.MethodInvocationTarget.Name + ": Cache not data");
             return false;
         }
 
