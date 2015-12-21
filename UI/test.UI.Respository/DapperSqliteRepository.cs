@@ -1,44 +1,33 @@
 ﻿using Dapper;
 using DapperExtensions;
-using DapperExtensions.Mapper;
-using DapperExtensions.Sql;
+using SQLinq.Dapper;
 using sweet.framework.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 /* =======================================================================
-* 创建时间：2015/12/14 14:44:18
+* 创建时间：2015/12/21 11:49:26
 * 作者：sweet
-* Framework: 4.5
+* Framework: 4.0
 * ========================================================================
 */
 
-namespace test.UI.Respository
+namespace insurance.assistant.repository
 {
-    public class DapperSqliteRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class,IEntity, new()
+    public class DapperRepository<T> //: IRepository<T>
+        where T : class, IEntity, new()
     {
-        //连接数据库字符串。
-        //private readonly string connectionString = "Data Source=test.db";
-
         private readonly string _databaseName;
 
-        private readonly DapperExtensionsConfiguration _config = new DapperExtensionsConfiguration(typeof(AutoClassMapper<>),
-                                                                                                   new List<Assembly>(),
-                                                                                                   new SqliteDialect());
-
-        public DapperSqliteRepository(string fileName)
+        public DapperRepository(string fileName)
         {
-            _databaseName = fileName;
-            DapperExtensions.DapperExtensions.Configure(_config);
-            //SQLiteConnection.CreateFile(databaseName);
+            this._databaseName = fileName;
         }
 
         protected DbConnection OpenConnection()
@@ -49,81 +38,85 @@ namespace test.UI.Respository
             return conn;
         }
 
-        protected IDatabase OpenDatabase()
+        public T Insert(T entity)
         {
-            var sqlGenerator = new SqlGeneratorImpl(_config);
-            var db = new Database(OpenConnection(), sqlGenerator);
-            return db;
-        }
-
-        public TEntity Insert(TEntity entity)
-        {
-            using (DbConnection conn = OpenConnection())
+            using (IDbConnection conn = OpenConnection())
             {
                 int id = conn.Insert(entity);
                 return entity;
             }
         }
 
-        public int InsertTransaction(IEnumerable<TEntity> entityList)
+        public int InsertTransaction(IEnumerable<T> entityList)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<TEntity> LoadEntities(Expression<Func<TEntity, bool>> whereLambda)
+        public IQueryable<T> LoadEntities(Expression<Func<T, object>> whereLambda)
         {
-            throw new NotImplementedException();
-        }
-
-        //public IQueryable<TEntity> LoadEntities(IPredicate predicate)
-        //{
-        //    using (IDatabase db = OpenDatabase())
-        //    {
-        //        //var predicate = Predicates.Field<TEntity>(expression, op, value);
-        //        IEnumerable<TEntity> list = db.GetList<TEntity>(predicate);
-
-        //        return list.AsQueryable();
-        //    }
-        //}
-
-        public IQueryable<TEntity> LoadPageEntities<S>(int pageIndex, int pageSize, out int totalCount,
-                                                       Expression<Func<TEntity, bool>> whereLambda,
-                                                       Expression<Func<TEntity, S>> orderLambda, bool isAsc = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int RemoveTransaction(IEnumerable<TEntity> entityList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveOrUpdate(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SaveOrUpdateTransaction(IEnumerable<TEntity> entityList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(TEntity entity)
-        {
-            using (IDatabase db = OpenDatabase())
+            using (IDbConnection conn = OpenConnection())
             {
-                //TEntity entity = conn.Get<TEntity>(entityId);
-                //person.LastName = "Baz";
-                return db.Update(entity);
+                var selector = new SQLinq.SQLinq<T>().Select(whereLambda);
+                var list = conn.Query(selector);
+                return list.AsQueryable();
             }
         }
 
-        public int UpdateTransaction(IEnumerable<TEntity> entityList)
+        public IQueryable<T> LoadPageEntities<S>(int pageIndex, int pageSize, out int totalCount,
+                                                 Expression<Func<T, object>> whereLambda,
+                                                 Expression<Func<T, object>> orderLambda, bool isAsc = true)
+        {
+            using (IDbConnection conn = OpenConnection())
+            {
+                var selector = new SQLinq.SQLinq<T>()
+                                         .Select(whereLambda);
+                //查询总数
+                string sql = selector.ToSQL().ToQuery();
+                totalCount = conn.ExecuteScalar<int>(sql);
+
+                selector = isAsc ? selector.OrderBy(orderLambda) : selector.OrderByDescending(orderLambda);
+                selector = selector.Skip(pageSize * (pageIndex - 1)).Take(pageSize);
+
+                var list = conn.Query(selector);
+
+                return list.AsQueryable();
+            }
+        }
+
+        public bool Remove(T entity)
+        {
+            throw new NotImplementedException();
+
+            using (IDbConnection conn = OpenConnection())
+            {
+                return conn.Delete(entity);
+            }
+        }
+
+        public int RemoveTransaction(IEnumerable<T> entityList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveOrUpdate(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SaveOrUpdateTransaction(IEnumerable<T> entityList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(T entity)
+        {
+            using (IDbConnection conn = OpenConnection())
+            {
+                return conn.Update(entity);
+            }
+        }
+
+        public int UpdateTransaction(IEnumerable<T> entityList)
         {
             throw new NotImplementedException();
         }
