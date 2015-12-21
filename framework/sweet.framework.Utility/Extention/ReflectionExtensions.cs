@@ -6,26 +6,6 @@ namespace sweet.framework.Utility.Extention
     public static class ReflectionExtensions
     {
         /// <summary>
-        /// 是否为可空类型
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static bool IsNullable(this Type type)
-        {
-            return type.IsGenericType && (typeof(Nullable<>) == type.GetGenericTypeDefinition());
-        }
-
-        /// <summary>
-        /// 是否为具体类型
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static bool IsConcrete(this Type type)
-        {
-            return (!type.IsInterface && !type.IsAbstract && !type.IsValueType);
-        }
-
-        /// <summary>
         /// 获取所有公有属性
         /// </summary>
         /// <param name="type"></param>

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace sweet.framework.Utility.Extention
 {
-    public static class StringExtention
+    public static class StringExtensions
     {
         public static IEnumerable<string> EachLines(this string str)
         {

@@ -7,7 +7,7 @@ namespace sweet.framework.Utility.Extention
     /// <summary>
     /// 枚举类型扩展方法类
     /// </summary>
-    public static class EnumExtention
+    public static class EnumExtensions
     {
         /// <summary>
         /// 获取枚举值的详细文本[Description]

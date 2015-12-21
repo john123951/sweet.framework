@@ -4,7 +4,7 @@ using System.Text;
 
 namespace sweet.framework.Utility.Extention
 {
-    public static class ObjectExtention
+    public static class ObjectExtensions
     {
         /// <summary>
         /// 遍历对象的公有属性，生成字符串

@@ -56,13 +56,15 @@
   <ItemGroup>
     <Compile Include="DebugUtility.cs" />
     <Compile Include="ExpressionUtility.cs" />
-    <Compile Include="Extention\DateTimeExtention.cs" />
-    <Compile Include="Extention\DynamicLinqExtention.cs" />
-    <Compile Include="Extention\EnumExtention.cs" />
+    <Compile Include="Extention\CollectionExtensions.cs" />
+    <Compile Include="Extention\DateTimeExtensions.cs" />
+    <Compile Include="Extention\DynamicLinqExtensions.cs" />
+    <Compile Include="Extention\EnumExtensions.cs" />
     <Compile Include="Extention\LinqExtentions.cs" />
-    <Compile Include="Extention\ObjectExtention.cs" />
+    <Compile Include="Extention\ObjectExtensions.cs" />
     <Compile Include="Extention\ReflectionExtensions.cs" />
-    <Compile Include="Extention\StringExtention.cs" />
+    <Compile Include="Extention\StringExtensions.cs" />
+    <Compile Include="Extention\TypeExtensions.cs" />
     <Compile Include="Generation\IdWorker\DisposableAction.cs" />
     <Compile Include="Generation\IdWorker\IdWorkerGenerator.cs" />
     <Compile Include="Generation\IdWorker\SystemFunction.cs" />

@@ -10,17 +10,33 @@ using test.UI.Service.Contract;
 
 namespace test.UI.Console
 {
+    using sweet.framework.Utility.Extention;
+
     internal class MainClass
     {
         public static void Main(string[] args)
         {
-            TestGetDescriptionTime();
-            BootStrapper.Configuration();
+            TestTimestamp();
+            //TestGetDescriptionTime();
+            //BootStrapper.Configuration();
 
-            System.Console.WriteLine(ReflectionUtility.GetCurrentMethodName());
+            //System.Console.WriteLine(ReflectionUtility.GetCurrentMethodName());
 
             //TestProductService();
             //TestDynamicLinq();
+            System.Console.WriteLine("end");
+            System.Console.ReadLine();
+        }
+
+        private static void TestTimestamp()
+        {
+            var now = DateTime.Now;
+            double ts = now.ToTimestamp();
+
+            System.Console.WriteLine(now);
+            System.Console.WriteLine(ts);
+
+            System.Console.WriteLine(DateTimeExtensions.ConvertIntDatetime(ts));
         }
 
         private static void TestGetDescriptionTime()
