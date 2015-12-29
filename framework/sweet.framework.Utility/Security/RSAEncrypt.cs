@@ -151,9 +151,7 @@ namespace sweet.framework.Utility.Security
             #endregion RSA/ECB/PKCS1Padding
 
 #if PKCS1Padding
-            RsaKeyParameters publicK =
-                (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)
-                    PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
+            RsaKeyParameters publicK = (Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)PublicKeyFactory.CreateKey(Org.BouncyCastle.Utilities.Encoders.Base64.Decode(publicKey));
             RsaKeyParameters pubParameters = new RsaKeyParameters(false, publicK.Modulus, publicK.Exponent);
 
             IBufferedCipher engine = CipherUtilities.GetCipher("RSA/ECB/PKCS1Padding");

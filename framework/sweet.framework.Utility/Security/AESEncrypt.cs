@@ -10,6 +10,22 @@ namespace sweet.framework.Utility.Security
         private static readonly Encoding Encoding = Encoding.UTF8;
 
         /// <summary>
+        /// 生成随即密钥，返回base64格式
+        /// </summary>
+        /// <param name="keySize">密钥长度</param>
+        /// <returns></returns>
+        public static string MakeKey(int keySize = 128)
+        {
+            var aesCryptoServiceProvider = new AesCryptoServiceProvider();
+            aesCryptoServiceProvider.KeySize = keySize;
+
+            aesCryptoServiceProvider.GenerateKey();
+            byte[] key = aesCryptoServiceProvider.Key;
+
+            return Convert.ToBase64String(key);
+        }
+
+        /// <summary>
         ///  AES 加密
         /// </summary>
         /// <param name="str"></param>
@@ -18,17 +34,18 @@ namespace sweet.framework.Utility.Security
         public static string AesEncrypt(string str, string key)
         {
             if (string.IsNullOrEmpty(str)) return null;
-            Byte[] toEncryptArray = Encoding.UTF8.GetBytes(str);
+            byte[] toEncryptArray = Encoding.UTF8.GetBytes(str);
+            byte[] keyByte = Convert.FromBase64String(key);
 
             RijndaelManaged aes = new System.Security.Cryptography.RijndaelManaged
             {
-                Key = Encoding.UTF8.GetBytes(key),
+                Key = keyByte,
                 Mode = System.Security.Cryptography.CipherMode.ECB,
                 Padding = System.Security.Cryptography.PaddingMode.PKCS7
             };
 
             ICryptoTransform cTransform = aes.CreateEncryptor();
-            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
 
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
@@ -42,19 +59,20 @@ namespace sweet.framework.Utility.Security
         public static string AesDecrypt(string str, string key)
         {
             if (string.IsNullOrEmpty(str)) return null;
-            Byte[] toEncryptArray = Convert.FromBase64String(str);
+            byte[] toEncryptArray = Convert.FromBase64String(str);
+            byte[] keyByte = Convert.FromBase64String(key);
 
             System.Security.Cryptography.RijndaelManaged aes = new System.Security.Cryptography.RijndaelManaged
             {
-                Key = Encoding.UTF8.GetBytes(key),
+                Key = keyByte,
                 Mode = System.Security.Cryptography.CipherMode.ECB,
                 Padding = System.Security.Cryptography.PaddingMode.PKCS7
             };
 
-            System.Security.Cryptography.ICryptoTransform cTransform = aes.CreateDecryptor();
-            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            ICryptoTransform cTransform = aes.CreateDecryptor();
+            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
 
-            return Encoding.UTF8.GetString(resultArray);
+            return Encoding.GetString(resultArray);
         }
 
         public static string Encrypt_AES256(string plainText, string keyStr)
