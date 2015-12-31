@@ -1,15 +1,20 @@
 ﻿using Dapper;
 using DapperExtensions;
+using DapperExtensions.Sql;
 using SQLinq.Dapper;
 using sweet.framework.Infrastructure.Interfaces;
+using sweet.framework.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
+using test.UI.Respository.Mapper;
 
 /* =======================================================================
 * 创建时间：2015/12/21 11:49:26
@@ -18,22 +23,51 @@ using System.Text;
 * ========================================================================
 */
 
-namespace insurance.assistant.repository
+namespace test.UI.Respository
 {
     public class DapperRepository<T> //: IRepository<T>
         where T : class, IEntity, new()
     {
-        private readonly string _databaseName;
+        private readonly string _connectionString;
+
+        private readonly DapperExtensionsConfiguration config = new DapperExtensionsConfiguration(typeof(EntityTableMapper<>),
+                                                                                                  new List<Assembly>(),
+                                                                                                  new SqliteDialect());
 
         public DapperRepository(string fileName)
         {
-            this._databaseName = fileName;
+            _connectionString = "Data Source=" + fileName;
+            InitDatabase(fileName);
+
+            DapperExtensions.DapperExtensions.Configure(config);
+        }
+
+        protected void InitDatabase(string fileName)
+        {
+            if (false == File.Exists(fileName))
+            {
+                string dir = Path.GetDirectoryName(fileName);
+                if (!Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
+
+                SQLiteConnection.CreateFile(fileName);
+
+                using (var connection = OpenConnection())
+                {
+                    string sql = ResourceUtility.ReadString("SqlScripts." + Path.GetFileNameWithoutExtension(fileName) + ".sql", Encoding.UTF8);
+                    if (string.IsNullOrWhiteSpace(sql)) { return; }
+
+                    using (var cmd = new SQLiteCommand(sql, (SQLiteConnection)connection))
+                    {
+                        cmd.ExecuteNonQuery();
+                        LogUtility.GetInstance().Info("创建Sqlite数据库：" + fileName);
+                    }
+                }
+            }
         }
 
         protected DbConnection OpenConnection()
         {
-            string connectionString = "Data Source=" + _databaseName;
-            SQLiteConnection conn = new SQLiteConnection(connectionString);
+            SQLiteConnection conn = new SQLiteConnection(_connectionString);
             conn.Open();
             return conn;
         }
@@ -56,7 +90,11 @@ namespace insurance.assistant.repository
         {
             using (IDbConnection conn = OpenConnection())
             {
+                //需要映射表名时使用：
+                //[SQLinqTable("AuditInfo")]
+                //或者new SQLinq.SQLinq<T>("ssssss")
                 var selector = new SQLinq.SQLinq<T>().Select(whereLambda);
+
                 var list = conn.Query(selector);
                 return list.AsQueryable();
             }

@@ -76,6 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Configs\log4net.config" />
     <None Include="packages.config" />
   </ItemGroup>
 </Project>

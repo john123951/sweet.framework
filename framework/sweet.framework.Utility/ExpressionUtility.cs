@@ -16,15 +16,21 @@ namespace sweet.framework.Utility
 {
     public class ExpressionUtility
     {
-        public static Expression<Func<T, TReturn>> FuncToExpression<T, TReturn>(Func<T, TReturn> f)
+        public static Expression<Func<T, TReturn>> FuncToExpression<T, TReturn>(Func<T, TReturn> func)
         {
-            return x => f(x);
+            return x => func(x);
         }
 
-        public static Func<T, TReturn> FuncToExpression<T, TReturn>(Expression<Func<T, TReturn>> f)
+        public static Func<T, TReturn> FuncToExpression<T, TReturn>(Expression<Func<T, TReturn>> expression)
         {
-            return f.Compile();
+            return expression.Compile();
         }
+
+        //public static Expression<Func<T, TNewReturn>> TransformReturnType<T, TReturn, TNewReturn>(Expression<Func<T, TReturn>> expression)
+        //    where TNewReturn : TReturn
+        //{
+        //    return x => (TNewReturn)expression.Compile()(x);
+        //}
 
         /// <summary>
         /// Usage:
@@ -52,6 +58,8 @@ namespace sweet.framework.Utility
                 lambda.TailCall,
                 explorer.Explore(converted).OfType<ParameterExpression>());
         }
+
+        #region 内部类
 
         private class ExpressionTargetTypeMutator : ExpressionVisitor
         {
@@ -86,7 +94,7 @@ namespace sweet.framework.Utility
         /// <summary>
         /// Utility class for the traversal of expression trees.
         /// </summary>
-        public class ExpressionTreeExplorer
+        private class ExpressionTreeExplorer
         {
             private readonly Visitor visitor = new Visitor();
 
@@ -271,5 +279,7 @@ namespace sweet.framework.Utility
                 }
             }
         }
+
+        #endregion 内部类
     }
 }
