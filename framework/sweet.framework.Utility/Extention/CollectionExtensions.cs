@@ -41,5 +41,15 @@ namespace sweet.framework.Utility.Extention
 
             return collection;
         }
+
+        public static void Merge<TSource>(this IList<TSource> source, IEnumerable<TSource> other)
+        {
+            if (source == null || other == null) { return; }
+
+            foreach (var item in other)
+            {
+                source.Add(item);
+            }
+        }
     }
 }
