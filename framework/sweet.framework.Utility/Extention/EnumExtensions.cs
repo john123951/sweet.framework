@@ -43,30 +43,21 @@ namespace sweet.framework.Utility.Extention
 
                 #region 3.5
 
-                ////反射出自定义属性
-                //if (CacheDescriptionAttr.ContainsKey(strTarget))
-                //{
-                //    var dscript = CacheDescriptionAttr[strTarget];
-                //    return dscript.Description;
-                //}
-                //else
-                //{
-                //    var arrAttr = fieldInfo.GetCustomAttributes(true);
-                //    for (int j = arrAttr.Length - 1; j >= 0; j--)
-                //    {
-                //        var attr = arrAttr[j];
-                //        //类型转换找到一个Description，用Description作为成员名称
-                //        var dscript = attr as DescriptionAttribute;
-                //        if (dscript != null)
-                //        {
-                //            CacheDescriptionAttr[strTarget] = dscript;
-                //            return dscript.Description;
-                //        }
-                //    }
-                //}
+                //反射出自定义属性
+
+                var arrAttr = fieldInfo.GetCustomAttributes(true);
+                for (int j = arrAttr.Length - 1; j >= 0; j--)
+                {
+                    var attr = arrAttr[j];
+                    //类型转换找到一个Description，用Description作为成员名称
+                    var dscript = attr as DescriptionAttribute;
+                    if (dscript != null)
+                    {
+                        return dscript.Description;
+                    }
+                }
 
                 #endregion 3.5
-            }
 
             //如果没有检测到合适的注释，则用默认名称
             return strTarget;

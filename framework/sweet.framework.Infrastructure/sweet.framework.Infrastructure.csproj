@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attr\RetryAttribute.cs" />
+    <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\AppSettingsConfigManager.cs" />
     <Compile Include="Interceptors\InvokeInterceptor.cs" />
     <Compile Include="RemoteInvoker.cs" />

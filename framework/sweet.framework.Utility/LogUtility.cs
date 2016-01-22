@@ -128,6 +128,7 @@ namespace sweet.framework.Utility
 
             var logger = LogManager.GetLogger(targetType.Name);
             logger.Debug(string.Format(msg, args));
+            return;
         }
 
         public void Info(string msg, params object[] args)
@@ -136,6 +137,30 @@ namespace sweet.framework.Utility
 
             var logger = LogManager.GetLogger(targetType.Name);
             logger.Info(string.Format(msg, args));
+        }
+
+        public void Warn(string msg, params object[] args)
+        {
+            var targetType = new StackFrame(1).GetMethod().DeclaringType;
+
+            var logger = LogManager.GetLogger(targetType.Name);
+            logger.Warn(string.Format(msg, args));
+        }
+
+        public void Error(string msg, params object[] args)
+        {
+            var targetType = new StackFrame(1).GetMethod().DeclaringType;
+
+            var logger = LogManager.GetLogger(targetType.Name);
+            logger.Error(string.Format(msg, args));
+        }
+
+        public void Fatal(string msg, params object[] args)
+        {
+            var targetType = new StackFrame(1).GetMethod().DeclaringType;
+
+            var logger = LogManager.GetLogger(targetType.Name);
+            logger.Fatal(string.Format(msg, args));
         }
     }
 }
