@@ -45,19 +45,20 @@ namespace sweet.framework.Utility.Extention
 
                 //反射出自定义属性
 
-                var arrAttr = fieldInfo.GetCustomAttributes(true);
-                for (int j = arrAttr.Length - 1; j >= 0; j--)
-                {
-                    var attr = arrAttr[j];
-                    //类型转换找到一个Description，用Description作为成员名称
-                    var dscript = attr as DescriptionAttribute;
-                    if (dscript != null)
-                    {
-                        return dscript.Description;
-                    }
-                }
+                //var arrAttr = fieldInfo.GetCustomAttributes(true);
+                //for (int j = arrAttr.Length - 1; j >= 0; j--)
+                //{
+                //    var attr = arrAttr[j];
+                //    //类型转换找到一个Description，用Description作为成员名称
+                //    var dscript = attr as DescriptionAttribute;
+                //    if (dscript != null)
+                //    {
+                //        return dscript.Description;
+                //    }
+                //}
 
                 #endregion 3.5
+            }
 
             //如果没有检测到合适的注释，则用默认名称
             return strTarget;
