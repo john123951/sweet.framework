@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using sweet.framework.Infrastructure.Interfaces;
+﻿using sweet.framework.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,100 +8,131 @@ using System.Threading.Tasks;
 
 namespace test.UI.Respository
 {
-    public class LiteDbRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IEntity, new()
-    {
-        private readonly string _conn;
-        private object _lock = new object();
+    //public class Linq2DbRepository<TEntity> : IRepository<TEntity>
+    //     where TEntity : class, IEntity, new()
+    //{
+    //    private readonly string _connectionString;
 
-        public LiteDbRepository(string fileName)
-        {
-            _conn = fileName;
-        }
+    //    public Linq2DbRepository(string connectionString)
+    //    {
+    //        _connectionString = connectionString;
+    //    }
 
-        public TEntity Insert(TEntity entity)
-        {
-            lock (_lock)
-            {
-                using (var db = new LiteDatabase(_conn))
-                {
-                    //获取 customers 集合，如果没有会创建，相当于表
-                    var collection = db.GetCollection<TEntity>(typeof(TEntity).Name);
+    //    protected LinqToDB.Data.DataConnection OpenConnection()
+    //    {
+    //        var conn = MySqlTools.CreateDataConnection(_connectionString);
 
-                    // 将新的对象插入到数据表中，Id是自增，自动生成的
-                    collection.Insert(entity);
+    //        return conn;
+    //    }
 
-                    return entity;
-                }
-            }
-        }
+    //    public bool Insert(TEntity entity)
+    //    {
+    //        using (var db = OpenConnection())
+    //        {
+    //            int result = db.Insert<TEntity>(entity);
 
-        public bool Update(TEntity entity)
-        {
-            using (var db = new LiteDatabase(_conn))
-            {
-                var collection = db.GetCollection<TEntity>(typeof(TEntity).Name);
+    //            return result > 0;
+    //        }
+    //    }
 
-                //保存到数据库
-                return collection.Update(entity);
-            }
-        }
+    //    public bool InsertTransaction(IEnumerable<TEntity> entityList)
+    //    {
+    //        using (var db = OpenConnection())
+    //        {
+    //            db.BulkCopy<TEntity>(entityList);
 
-        public bool SaveOrUpdate(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
+    //            return true;
+    //        }
+    //    }
 
-        public bool Remove(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
+    //    public IQueryable<TEntity> LoadEntities(Expression<Func<TEntity, bool>> whereLambda)
+    //    {
+    //        using (var db = OpenConnection())
+    //        {
+    //            var list = db.GetTable<TEntity>().Where(whereLambda)
+    //                                             .ToList()
+    //                                             .AsQueryable();
 
-        public int InsertTransaction(IEnumerable<TEntity> entityList)
-        {
-            throw new NotImplementedException();
-        }
+    //            return list;
+    //        }
+    //    }
 
-        public int UpdateTransaction(IEnumerable<TEntity> entityList)
-        {
-            throw new NotImplementedException();
-        }
+    //    public IQueryable<TEntity> LoadPageEntities<S>(int pageIndex, int pageSize, out int totalCount,
+    //                                                   Expression<Func<TEntity, bool>> whereLambda,
+    //                                                   Expression<Func<TEntity, object>> orderLambda, bool isAsc = true)
+    //    {
+    //        using (var db = OpenConnection())
+    //        {
+    //            IQueryable<TEntity> linq = db.GetTable<TEntity>().Where(whereLambda);
 
-        public int SaveOrUpdateTransaction(IEnumerable<TEntity> entityList)
-        {
-            throw new NotImplementedException();
-        }
+    //            totalCount = linq.Count();
 
-        public int RemoveTransaction(IEnumerable<TEntity> entityList)
-        {
-            throw new NotImplementedException();
-        }
+    //            linq = isAsc ? linq.OrderBy(orderLambda) : linq.OrderByDescending(orderLambda);
+    //            linq = linq.Skip(pageSize * (pageIndex - 1)).Take(pageSize);
 
-        public IQueryable<TEntity> LoadEntities(Expression<Func<TEntity, bool>> whereLambda)
-        {
-            using (var db = new LiteDatabase(_conn))
-            {
-                var collection = db.GetCollection<TEntity>(typeof(TEntity).Name);
+    //            return linq;
+    //        }
+    //    }
 
-                return collection.Find(whereLambda).ToList().AsQueryable();
-            }
-        }
+    //    public bool Remove(TEntity entity)
+    //    {
+    //        using (var db = OpenConnection())
+    //        {
+    //            int result = db.Delete<TEntity>(entity);
 
-        public IQueryable<TEntity> LoadPageEntities<S>(int pageIndex, int pageSize, out int totalCount,
-                                                       Expression<Func<TEntity, bool>> whereLambda,
-                                                       Expression<Func<TEntity, S>> orderLambda, bool isAsc = true)
-        {
-            using (var db = new LiteDatabase(_conn))
-            {
-                var collection = db.GetCollection<TEntity>(typeof(TEntity).Name);
-                int skip = pageSize * (pageIndex - 1);
+    //            if (result > 0)
+    //            {
+    //                return true;
+    //            }
 
-                IQueryable<TEntity> linq = collection.Find(whereLambda, skip, pageSize).ToList().AsQueryable();
+    //            return false;
+    //        }
+    //    }
 
-                totalCount = collection.Count(whereLambda);
+    //    public bool RemoveTransaction(IEnumerable<TEntity> entityList)
+    //    {
+    //        using (var db = OpenConnection())
+    //        using (var transaction = new TransactionScope())
+    //        {
+    //            foreach (var entity in entityList)
+    //            {
+    //                int result = db.Delete<TEntity>(entity);
 
-                return linq;
-            }
-        }
-    }
+    //                if (result <= 0)
+    //                {
+    //                    db.RollbackTransaction();
+    //                    return false;
+    //                }
+    //            }
+    //            transaction.Complete();
+
+    //            return true;
+    //        }
+    //    }
+
+    //    public bool SaveOrUpdate(TEntity entity)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public int SaveOrUpdateTransaction(IEnumerable<TEntity> entityList)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public bool Update(TEntity entity)
+    //    {
+    //        using (var db = OpenConnection())
+    //        {
+    //            int result = db.Update<TEntity>(entity);
+
+    //            return result > 0;
+    //        }
+    //    }
+
+    //    public int UpdateTransaction(IEnumerable<TEntity> entityList)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

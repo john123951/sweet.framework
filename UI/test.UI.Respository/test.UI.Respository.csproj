@@ -66,6 +66,7 @@
     <Compile Include="DapperSqliteRepository.cs" />
     <Compile Include="LiteDbRepository.cs" />
     <Compile Include="Mapper\EntityTableMapper.cs" />
+    <Compile Include="MemoryRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

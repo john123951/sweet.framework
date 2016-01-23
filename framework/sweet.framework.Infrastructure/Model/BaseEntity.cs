@@ -20,6 +20,7 @@ namespace sweet.framework.Infrastructure.Model
 
                 return _id;
             }
+            set { _id = value; }
         }
     }
 }

@@ -125,42 +125,76 @@ namespace sweet.framework.Utility
         public void Debug(string msg, params object[] args)
         {
             var targetType = new StackFrame(1).GetMethod().DeclaringType;
-
             var logger = LogManager.GetLogger(targetType.Name);
-            logger.Debug(string.Format(msg, args));
-            return;
+
+            if (args == null || args.Length <= 0)
+            {
+                logger.Debug(msg);
+            }
+            else
+            {
+                logger.DebugFormat(msg, args);
+            }
         }
 
         public void Info(string msg, params object[] args)
         {
             var targetType = new StackFrame(1).GetMethod().DeclaringType;
-
             var logger = LogManager.GetLogger(targetType.Name);
-            logger.Info(string.Format(msg, args));
+
+            if (args == null || args.Length <= 0)
+            {
+                logger.Info(msg);
+            }
+            else
+            {
+                logger.InfoFormat(msg, args);
+            }
         }
 
         public void Warn(string msg, params object[] args)
         {
             var targetType = new StackFrame(1).GetMethod().DeclaringType;
-
             var logger = LogManager.GetLogger(targetType.Name);
-            logger.Warn(string.Format(msg, args));
+
+            if (args == null || args.Length <= 0)
+            {
+                logger.Warn(msg);
+            }
+            else
+            {
+                logger.WarnFormat(msg, args);
+            }
         }
 
         public void Error(string msg, params object[] args)
         {
             var targetType = new StackFrame(1).GetMethod().DeclaringType;
-
             var logger = LogManager.GetLogger(targetType.Name);
-            logger.Error(string.Format(msg, args));
+
+            if (args == null || args.Length <= 0)
+            {
+                logger.Error(msg);
+            }
+            else
+            {
+                logger.ErrorFormat(msg, args);
+            }
         }
 
         public void Fatal(string msg, params object[] args)
         {
             var targetType = new StackFrame(1).GetMethod().DeclaringType;
-
             var logger = LogManager.GetLogger(targetType.Name);
-            logger.Fatal(string.Format(msg, args));
+
+            if (args == null || args.Length <= 0)
+            {
+                logger.Fatal(msg);
+            }
+            else
+            {
+                logger.FatalFormat(msg, args);
+            }
         }
     }
 }
