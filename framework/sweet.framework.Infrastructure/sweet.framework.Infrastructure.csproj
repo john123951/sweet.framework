@@ -43,6 +43,7 @@
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\AppSettingsConfigManager.cs" />
     <Compile Include="Interceptors\InvokeInterceptor.cs" />
+    <Compile Include="Interceptors\RequestLogInterceptor.cs" />
     <Compile Include="Interceptors\TransactionInterceptor.cs" />
     <Compile Include="RemoteInvoker.cs" />
     <Compile Include="Interceptors\CacheInterceptor.cs" />

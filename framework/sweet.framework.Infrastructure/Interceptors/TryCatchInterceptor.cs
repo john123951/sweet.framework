@@ -1,4 +1,6 @@
 ﻿using Castle.DynamicProxy;
+using sweet.framework.Infrastructure.Model;
+using sweet.framework.Utility;
 using System;
 using System.Diagnostics;
 
@@ -17,8 +19,22 @@ namespace sweet.framework.Infrastructure.Interceptors
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                invocation.ReturnValue = ReturnValue(ex);
+                LogUtility.GetInstance().WriteLog(invocation.TargetType.Name, LogUtility.LogType.Error, "tryCatch", ex);
             }
+        }
+
+        protected virtual object ReturnValue(Exception ex)
+        {
+            return null;
+        }
+    }
+
+    public class HanderTryCatchInterceptor : TryCatchInterceptor
+    {
+        protected override object ReturnValue(Exception ex)
+        {
+            return ResultHandler.Fail(ex.Message);
         }
     }
 }
