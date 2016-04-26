@@ -19,12 +19,12 @@ namespace sweet.framework.Infrastructure.Interceptors
             }
             catch (Exception ex)
             {
-                invocation.ReturnValue = ReturnValue(ex);
+                invocation.ReturnValue = ReturnValue(invocation.Method.ReturnType, ex);
                 LogUtility.GetInstance().WriteLog(invocation.TargetType.Name, LogUtility.LogType.Error, "tryCatch", ex);
             }
         }
 
-        protected virtual object ReturnValue(Exception ex)
+        protected virtual object ReturnValue(Type returnType, Exception ex)
         {
             return null;
         }
@@ -32,9 +32,16 @@ namespace sweet.framework.Infrastructure.Interceptors
 
     public class HanderTryCatchInterceptor : TryCatchInterceptor
     {
-        protected override object ReturnValue(Exception ex)
+        protected override object ReturnValue(Type returnType, Exception ex)
         {
-            return ResultHandler.Fail(ex.Message);
+            var handler = Activator.CreateInstance(returnType) as ResultHandler;
+
+            if (handler != null)
+            {
+                handler.Message = ex.Message;
+            }
+
+            return handler;
         }
     }
 }
