@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="Contract\IProductRepository.cs" />
     <Compile Include="Contract\IRoleRepository.cs" />
-    <Compile Include="DapperSqliteRepository.cs" />
+    <Compile Include="DapperRepository.cs" />
     <Compile Include="Entities\ProductEntity.cs" />
     <Compile Include="Entities\RoleEntity.cs" />
     <Compile Include="Entities\UserEntity.cs" />

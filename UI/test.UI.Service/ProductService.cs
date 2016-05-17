@@ -2,10 +2,10 @@
 using sweet.framework.Infrastructure.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using test.UI.Model.ServiceDtos;
 using test.UI.Respository.Contract;
 using test.UI.Respository.Entities;
 using test.UI.Service.Contract;
+using test.UI.Service.ServiceDtos;
 
 namespace test.UI.Service
 {

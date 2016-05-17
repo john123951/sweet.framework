@@ -1,6 +1,6 @@
 ﻿using sweet.framework.Infrastructure.Interfaces;
 using System.Collections.Generic;
-using test.UI.Model.ServiceDtos;
+using test.UI.Service.ServiceDtos;
 
 namespace test.UI.Service.Contract
 {

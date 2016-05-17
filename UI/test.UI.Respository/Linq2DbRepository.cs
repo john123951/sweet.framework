@@ -19,6 +19,18 @@ using System.Transactions;
 
 namespace test.UI.Respository
 {
+    /// <summary>
+    /// 使用linq2db访问mysql
+    /// https://github.com/linq2db/linq2db
+    ///
+    /// Supported databases:
+    ///     DB2(LUW, z/OS)      Firebird                Informix            Microsoft Access
+    ///     Microsoft Sql Azure Microsoft Sql Server    Microsoft SqlCe     MySql
+    ///     Oracle              PostgreSQL              SQLite              SAP HANA
+    ///     Sybase ASE
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
     public class Linq2DbRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>, new()
         where TKey : struct

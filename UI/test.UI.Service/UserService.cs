@@ -1,7 +1,7 @@
 ﻿using sweet.framework.Infrastructure.Attr;
 using System.Collections.Generic;
 using System.Linq;
-using test.UI.Model.ServiceDtos;
+using test.UI.Service.ServiceDtos;
 using test.UI.Service.Contract;
 
 namespace test.UI.Service

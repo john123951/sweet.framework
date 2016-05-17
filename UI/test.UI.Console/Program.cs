@@ -1,17 +1,15 @@
-﻿using sweet.framework.Utility;
-using sweet.framework.Utility.Extention;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Dynamic;
-using test.UI.Service.Contract;
-
-namespace test.UI.Console
+﻿namespace test.UI.Console
 {
-    using Model.ServiceDtos;
+    using Service.ServiceDtos;
+    using sweet.framework.Utility;
     using sweet.framework.Utility.Extention;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Linq.Dynamic;
     using System.Reflection;
+    using test.UI.Service.Contract;
 
     internal class MainClass
     {

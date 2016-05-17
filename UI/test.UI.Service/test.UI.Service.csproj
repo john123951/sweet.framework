@@ -38,6 +38,9 @@
     <Compile Include="Contract\IUserService.cs" />
     <Compile Include="AuthService.cs" />
     <Compile Include="ProductService.cs" />
+    <Compile Include="ServiceDtos\ProductDto.cs" />
+    <Compile Include="ServiceDtos\RoleDto.cs" />
+    <Compile Include="ServiceDtos\UserDto.cs" />
     <Compile Include="UserService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

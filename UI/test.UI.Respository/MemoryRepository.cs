@@ -57,7 +57,10 @@ namespace test.UI.Respository
 
         public bool SaveOrUpdate(TEntity entity)
         {
-            throw new NotImplementedException();
+            var table = GetTable();
+            table[entity.Id] = entity;
+
+            return true;
         }
 
         public bool Remove(TEntity entity)
@@ -81,7 +84,17 @@ namespace test.UI.Respository
 
         public int SaveOrUpdateTransaction(IEnumerable<TEntity> entityList)
         {
-            throw new NotImplementedException();
+            var table = GetTable();
+
+            foreach (var entity in entityList)
+            {
+                if (!table.Values.Any(x => x.Id.ToString() == entity.Id.ToString()))
+                {
+                    throw new KeyNotFoundException("key=" + entity.Id);
+                }
+                table[entity.Id] = entity;
+            }
+            return entityList.Count();
         }
 
         public int InsertTransaction(IEnumerable<TEntity> entityList)
@@ -97,7 +110,13 @@ namespace test.UI.Respository
 
         public int UpdateTransaction(IEnumerable<TEntity> entityList)
         {
-            throw new NotImplementedException();
+            var table = GetTable();
+
+            foreach (var entity in entityList)
+            {
+                table[entity.Id] = entity;
+            }
+            return entityList.Count();
         }
 
         public IQueryable<TEntity> LoadEntities(Expression<Func<TEntity, bool>> whereLambda)
