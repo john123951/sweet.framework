@@ -38,6 +38,10 @@
       <HintPath>..\..\packages\DapperExtensions.1.4.4\lib\net40\DapperExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="linq2db, Version=1.0.7.4, Culture=neutral, PublicKeyToken=f19f8aed7feff67e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\linq2db.1.0.7.4\lib\net45\linq2db.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LiteDB, Version=1.0.4.0, Culture=neutral, PublicKeyToken=5c2fff750805920e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LiteDB.1.0.4\lib\net40\LiteDB.dll</HintPath>
       <Private>True</Private>
@@ -56,6 +60,7 @@
       <HintPath>..\..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net45\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -69,6 +74,7 @@
     <Compile Include="Entities\ProductEntity.cs" />
     <Compile Include="Entities\RoleEntity.cs" />
     <Compile Include="Entities\UserEntity.cs" />
+    <Compile Include="Linq2DbRepository.cs" />
     <Compile Include="LiteDbRepository.cs" />
     <Compile Include="Mapper\EntityTableMapper.cs" />
     <Compile Include="MemoryRepository.cs" />
