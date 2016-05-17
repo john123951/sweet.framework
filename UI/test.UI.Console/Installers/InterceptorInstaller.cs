@@ -10,7 +10,7 @@ namespace test.UI.Console.Installers
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Classes.FromAssemblyContaining<CacheInterceptor>() // .FromAssemblyInThisApplication()
+            container.Register(Classes.FromAssemblyContaining<CacheInterceptor>()   //.FromAssemblyInThisApplication()
                                       .BasedOn<IInterceptor>()
                                       .LifestyleSingleton()
                                       );

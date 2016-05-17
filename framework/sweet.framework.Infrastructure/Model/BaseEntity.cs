@@ -3,24 +3,15 @@ using sweet.framework.Utility.Generation.IdWorker;
 
 namespace sweet.framework.Infrastructure.Model
 {
-    public class BaseEntity : IEntity
+    public class BaseEntity : IEntity<long>
     {
         private static readonly IdWorkerGenerator IdWorker = new IdWorkerGenerator(1, 1);
 
-        private long _id;
-
-        public long Id
+        public BaseEntity()
         {
-            get
-            {
-                if (_id == 0)
-                {
-                    _id = IdWorker.NextId();
-                }
-
-                return _id;
-            }
-            set { _id = value; }
+            this.Id = IdWorker.NextId();
         }
+
+        public virtual long Id { set; get; }
     }
 }

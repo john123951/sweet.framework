@@ -5,24 +5,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
-using test.UI.Model.Entities;
 using test.UI.Service.Contract;
 
 namespace test.UI.Console
 {
+    using Model.ServiceDtos;
     using sweet.framework.Utility.Extention;
+    using System.Reflection;
 
     internal class MainClass
     {
         public static void Main(string[] args)
         {
-            TestTimestamp();
+            WindsorUtility.GetInstance().Register(Assembly.GetEntryAssembly());
+
+            //TestTimestamp();
             //TestGetDescriptionTime();
             //BootStrapper.Configuration();
 
             //System.Console.WriteLine(ReflectionUtility.GetCurrentMethodName());
 
-            //TestProductService();
+            TestProductService();
             //TestDynamicLinq();
             System.Console.WriteLine("end");
             System.Console.ReadLine();
@@ -98,22 +101,42 @@ namespace test.UI.Console
             int total;
             const long userId = 112;
 
-            System.Console.WriteLine("GetProductList");
-            var list = productService.GetProductList(userId, 0, 5, out total);
-            Print(list);
-
-            System.Console.WriteLine("InsertUser");
-            productService.AddProduct(new ProductInfo()
             {
-                Id = DateTime.Now.Millisecond,
-                Name = "Book",
-                Price = 100,
-                UserId = userId
-            });
+                System.Console.WriteLine("InsertUser");
+                productService.AddProduct(new ProductDto()
+                {
+                    Id = DateTime.Now.Millisecond,
+                    Name = "Book0",
+                    Price = 100,
+                    UserId = userId
+                });
+            }
+            {
+                System.Console.WriteLine("GetProductList");
+                var list = productService.GetProductList(userId, 0, 5, out total);
+                Print(list);
+            }
+            {
+                System.Console.WriteLine("GetProductList");
+                var list = productService.GetProductList(userId, 0, 5, out total);
+                Print(list);
+            }
+            {
+                System.Console.WriteLine("InsertUser");
+                productService.AddProduct(new ProductDto()
+                {
+                    Id = DateTime.Now.Millisecond,
+                    Name = "Book1",
+                    Price = 101,
+                    UserId = userId
+                });
+            }
 
-            System.Console.WriteLine("GetProductList");
-            var list2 = productService.GetProductList(userId, 0, 5, out total);
-            Print(list2);
+            {
+                System.Console.WriteLine("GetProductList");
+                var list2 = productService.GetProductList(userId, 0, 5, out total);
+                Print(list2);
+            }
         }
 
         private static void Print<T>(IEnumerable<T> itor)
@@ -137,11 +160,9 @@ namespace test.UI.Console
                     System.Console.Write(p.GetValue(item));
                     System.Console.Write("     ");
                 }
+                System.Console.WriteLine();
             }
-            System.Console.WriteLine();
             System.Console.WriteLine("===============================================================");
-
-            System.Console.ReadKey();
         }
     }
 }

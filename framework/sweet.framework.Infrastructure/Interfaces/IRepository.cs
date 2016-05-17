@@ -5,10 +5,11 @@ using System.Linq.Expressions;
 
 namespace sweet.framework.Infrastructure.Interfaces
 {
-    public interface IRepository<TEntity>
-        where TEntity : IEntity
+    public interface IRepository<TEntity, TKey>
+        where TEntity : IEntity<TKey>
+        where TKey : struct
     {
-        TEntity Insert(TEntity entity);
+        bool Insert(TEntity entity);
 
         bool Update(TEntity entity);
 
@@ -26,8 +27,8 @@ namespace sweet.framework.Infrastructure.Interfaces
 
         IQueryable<TEntity> LoadEntities(Expression<Func<TEntity, bool>> whereLambda);
 
-        IQueryable<TEntity> LoadPageEntities<S>(int pageIndex, int pageSize, out int totalCount,
+        IQueryable<TEntity> LoadPageEntities<TOrder>(int pageIndex, int pageSize, out int totalCount,
                                         Expression<Func<TEntity, bool>> whereLambda,
-                                        Expression<Func<TEntity, S>> orderLambda, bool isAsc = true);
+                                        Expression<Func<TEntity, TOrder>> orderLambda, bool isAsc = true);
     }
 }

@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using sweet.framework.Infrastructure.Interfaces;
-using test.UI.Model.Entities;
+﻿using sweet.framework.Infrastructure.Interfaces;
+using System.Collections.Generic;
+using test.UI.Model.ServiceDtos;
 
 namespace test.UI.Service.Contract
 {
     public interface IUserService : IService
     {
-        List<UserInfo> GetUserList();
+        List<UserDto> GetUserList();
 
-        bool InsertUser(UserInfo userInfo);
+        bool InsertUser(UserDto userInfo);
 
         bool RemoveUser(long userId);
     }

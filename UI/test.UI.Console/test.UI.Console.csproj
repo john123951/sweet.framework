@@ -41,9 +41,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Installers\RepositoryInstall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Installers\CacheInstaller.cs" />
+    <Compile Include="Installers\ComponentInstall.cs" />
     <Compile Include="Installers\ServiceInstaller.cs" />
     <Compile Include="Installers\InterceptorInstaller.cs" />
     <Compile Include="BootStrapper.cs" />

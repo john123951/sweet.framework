@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using sweet.framework.Infrastructure.Interfaces;
-using test.UI.Model.Entities;
+﻿using sweet.framework.Infrastructure.Interfaces;
+using System.Collections.Generic;
+using test.UI.Model.ServiceDtos;
 
 namespace test.UI.Service.Contract
 {
-	public interface IAuthService : IService
-	{
-		List<RoleInfo> GetUserRole (long userId);
+    public interface IAuthService : IService
+    {
+        List<RoleDto> GetUserRole(long userId);
 
-		bool SetUserRole (long userId, List<RoleInfo> roles);
-	}
+        bool SetUserRole(long userId, List<RoleDto> roles);
+    }
 }
-

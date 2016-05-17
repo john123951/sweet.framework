@@ -26,7 +26,7 @@ using test.UI.Respository.Mapper;
 namespace test.UI.Respository
 {
     public class DapperRepository<T> //: IRepository<T>
-        where T : class, IEntity, new()
+        where T : class, IEntity<long>, new()
     {
         private readonly string _connectionString;
 

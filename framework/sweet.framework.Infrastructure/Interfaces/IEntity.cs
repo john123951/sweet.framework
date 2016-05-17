@@ -1,7 +1,8 @@
 ﻿namespace sweet.framework.Infrastructure.Interfaces
 {
-    public interface IEntity
+    public interface IEntity<TKey>
+        where TKey : struct
     {
-        long Id { get; set; }
+        TKey Id { get; set; }
     }
 }

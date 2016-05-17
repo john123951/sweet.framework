@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using sweet.framework.Infrastructure.Attr;
+using System.Collections.Generic;
 using System.Linq;
-using sweet.framework.Infrastructure.Attr;
-using test.UI.Model.Entities;
+using test.UI.Model.ServiceDtos;
 using test.UI.Service.Contract;
 
 namespace test.UI.Service
 {
     public class UserService : IUserService
     {
-        private static readonly List<UserInfo> _db = new List<UserInfo>();
+        private static readonly List<UserDto> _db = new List<UserDto>();
 
         [Cache(KeyName = "GetUserList", Subscribe = new[] { "InsertUser", "RemoveUser" })]
-        public List<UserInfo> GetUserList()
+        public List<UserDto> GetUserList()
         {
             return _db;
         }
 
         [Cache(Publish = "InsertUser")]
-        public bool InsertUser(UserInfo userInfo)
+        public bool InsertUser(UserDto userInfo)
         {
             _db.Add(userInfo);
             return true;

@@ -54,6 +54,10 @@
       <Project>{6D20D177-F949-4F74-9B2D-CDDDE5716497}</Project>
       <Name>sweet.framework.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\test.UI.Respository\test.UI.Respository.csproj">
+      <Project>{5f32bbd2-ab12-4af9-a09f-5a8a80795346}</Project>
+      <Name>test.UI.Respository</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
 </Project>
