@@ -26,6 +26,8 @@ namespace sweet.framework.Infrastructure.Interceptors
 
                 while (!IsSuccess(invocation.ReturnValue) && currentCount < retryCount)
                 {
+                    if (retryAttr.Interval > 0) { System.Threading.Thread.Sleep(retryAttr.Interval); }
+
                     currentCount++;
                     invocation.Proceed();
                 }

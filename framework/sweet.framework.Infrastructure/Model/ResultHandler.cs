@@ -6,6 +6,10 @@
 
         public string Message { get; set; }
 
+        protected ResultHandler()
+        {
+        }
+
         public static ResultHandler Success()
         {
             var result = new ResultHandler { IsSuccess = true, Message = "操作成功" };
@@ -39,5 +43,9 @@
     public class ResultHandler<T> : ResultHandler
     {
         public T Result { get; set; }
+
+        internal ResultHandler()
+        {
+        }
     }
 }

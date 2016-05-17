@@ -3,7 +3,7 @@ using sweet.framework.Utility.Generation.IdWorker;
 
 namespace sweet.framework.Infrastructure.Model
 {
-    public class BaseEntity : IEntity<long>
+    public abstract class BaseEntity : IEntity<long>
     {
         private static readonly IdWorkerGenerator IdWorker = new IdWorkerGenerator(1, 1);
 
