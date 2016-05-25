@@ -3,7 +3,7 @@ using System;
 
 namespace test.UI.Respository.Entities
 {
-    public class ProductEntity : BaseEntity
+    public class ProductEntity : PrimaryEntity
     {
         public string Name { get; set; }
 

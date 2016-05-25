@@ -2,7 +2,6 @@
 using sweet.framework.Infrastructure.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using test.UI.Respository.Contract;
 using test.UI.Respository.Entities;
 using test.UI.Service.Contract;
 using test.UI.Service.ServiceDtos;
@@ -11,9 +10,9 @@ namespace test.UI.Service
 {
     public class ProductService : IProductService
     {
-        private IRepository<ProductEntity, long> _productRepository;
+        private IRepository<ProductEntity> _productRepository;
 
-        public ProductService(IRepository<ProductEntity, long> productRepository)
+        public ProductService(IRepository<ProductEntity> productRepository)
         {
             _productRepository = productRepository;
         }

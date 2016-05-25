@@ -5,9 +5,8 @@ using System.Linq.Expressions;
 
 namespace sweet.framework.Infrastructure.Interfaces
 {
-    public interface IRepository<TEntity, TKey>
-        where TEntity : IEntity<TKey>
-        where TKey : struct
+    public interface IRepository<TEntity>
+        where TEntity : class, IEntity, new()
     {
         bool Insert(TEntity entity);
 

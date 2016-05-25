@@ -28,22 +28,22 @@ namespace test.UI.Console.Installers
             //string mysqlConnection = ConfigurationManager.ConnectionStrings["mysql_insurance"].ConnectionString;
 
             //container.Register(Component.For(typeof(IRepository<,>))
-            //                .ImplementedBy(typeof(Linq2DbRepository<>))
+            //                .ImplementedBy(typeof(Linq2DbRepository<,>))
             //                .DependsOn(Dependency.OnConfigValue("connectionString", mysqlConnection))
             //                .LifestyleSingleton()
             //                );
 
-            container.Register(Component.For(typeof(IRepository<,>))
-                                        .ImplementedBy(typeof(MemoryRepository<,>))
+            container.Register(Component.For(typeof(IRepository<>))
+                                        .ImplementedBy(typeof(MemoryRepository<>))
                                         .LifestyleSingleton()
                                         );
 
             container.Register(Component.For(typeof(IRoleRepository))
-                                        .ImplementedBy(typeof(MemoryRepository<RoleEntity, long>))
+                                        .ImplementedBy(typeof(MemoryRepository<RoleEntity>))
                                         .LifestyleSingleton()
                                         );
             container.Register(Component.For(typeof(IProductRepository))
-                                        .ImplementedBy(typeof(MemoryRepository<ProductEntity, long>))
+                                        .ImplementedBy(typeof(MemoryRepository<ProductEntity>))
                                         .LifestyleSingleton()
                                         );
         }

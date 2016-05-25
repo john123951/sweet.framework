@@ -54,7 +54,7 @@
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Model\ApiResponse.cs" />
-    <Compile Include="Model\BaseEntity.cs" />
+    <Compile Include="Model\PrimaryEntity.cs" />
     <Compile Include="Model\ResultHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\ICacheProvider.cs" />

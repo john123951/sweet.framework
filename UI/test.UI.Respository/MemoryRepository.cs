@@ -1,4 +1,5 @@
 ﻿using sweet.framework.Infrastructure.Interfaces;
+using sweet.framework.Infrastructure.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,19 +16,18 @@ using System.Threading.Tasks;
 
 namespace test.UI.Respository
 {
-    public class MemoryRepository<TEntity, TKey> : IRepository<TEntity, TKey>
-        where TEntity : class, IEntity<TKey>
-        where TKey : struct
+    public class MemoryRepository<TEntity> : IRepository<TEntity>
+        where TEntity : PrimaryEntity, new()
     {
-        private Dictionary<string, Dictionary<TKey, TEntity>> _database = new Dictionary<string, Dictionary<TKey, TEntity>>();
+        private Dictionary<string, Dictionary<long, TEntity>> _database = new Dictionary<string, Dictionary<long, TEntity>>();
 
-        private Dictionary<TKey, TEntity> GetTable()
+        private Dictionary<long, TEntity> GetTable()
         {
             string tableName = typeof(TEntity).Name;
 
             if (!_database.ContainsKey(tableName))
             {
-                _database[tableName] = new Dictionary<TKey, TEntity>();
+                _database[tableName] = new Dictionary<long, TEntity>();
             }
 
             return _database[tableName];

@@ -8,7 +8,7 @@ using test.UI.Respository.Entities;
 
 namespace test.UI.Respository.Contract
 {
-    public interface IRoleRepository : IRepository<RoleEntity, long>
+    public interface IRoleRepository : IRepository<RoleEntity>
     {
     }
 }

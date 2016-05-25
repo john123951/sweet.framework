@@ -31,7 +31,7 @@ namespace test.UI.Respository
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DapperRepository<T> //: IRepository<T>
-        where T : class, IEntity<long>, new()
+        where T : class, IEntity, new()
     {
         private readonly string _connectionString;
 

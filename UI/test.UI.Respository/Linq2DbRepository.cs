@@ -30,10 +30,8 @@ namespace test.UI.Respository
     ///     Sybase ASE
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    public class Linq2DbRepository<TEntity, TKey> : IRepository<TEntity, TKey>
-        where TEntity : class, IEntity<TKey>, new()
-        where TKey : struct
+    public class Linq2DbRepository<TEntity> : IRepository<TEntity>
+        where TEntity : class, IEntity, new()
     {
         private readonly IDataProvider _dataProvider;
         private readonly string _connectionString;

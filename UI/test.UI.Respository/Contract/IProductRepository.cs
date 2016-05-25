@@ -8,7 +8,7 @@ using test.UI.Respository.Entities;
 
 namespace test.UI.Respository.Contract
 {
-    public interface IProductRepository : IRepository<ProductEntity, long>
+    public interface IProductRepository : IRepository<ProductEntity>
     {
     }
 }
