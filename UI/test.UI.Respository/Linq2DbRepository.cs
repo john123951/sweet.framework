@@ -36,6 +36,8 @@ namespace test.UI.Respository
     public class Linq2DbRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity, new()
     {
+        public static string DefaultProviderName = ProviderName.MySql;
+
         private readonly string _providerName;
         private readonly string _connectionString;
 
@@ -48,11 +50,10 @@ namespace test.UI.Respository
         }
 
         public Linq2DbRepository(string connectionString)
-            : this(ProviderName.MySql, connectionString)
+            : this(null, connectionString)
         {
         }
 
-        // ProviderName.MySql
         public Linq2DbRepository(string providerName, string connectionString)
         {
             _providerName = providerName;
@@ -62,7 +63,7 @@ namespace test.UI.Respository
         protected DataConnection OpenConnection()
         {
             //var conn = LinqToDB.DataProvider.MySql.MySqlTools.CreateDataConnection(_connectionString);
-            var conn = _providerName == null ? new DataConnection(_connectionString) : new DataConnection(_providerName, _connectionString);
+            var conn = _providerName == null ? new DataConnection(DefaultProviderName, _connectionString) : new DataConnection(_providerName, _connectionString);
 
             return conn;
         }
@@ -107,12 +108,13 @@ namespace test.UI.Respository
 
         public int InsertTransaction(IEnumerable<TEntity> entityList)
         {
+            //using (var transaction = db.BeginTransaction())
             using (var db = OpenConnection())
-            using (var transaction = db.BeginTransaction())
+            using (var transaction = new TransactionScope())
             {
                 var result = db.BulkCopy<TEntity>(entityList);
 
-                transaction.Commit();
+                transaction.Complete();
                 return (int)result.RowsCopied;
             }
         }
@@ -120,14 +122,14 @@ namespace test.UI.Respository
         public int UpdateTransaction(IEnumerable<TEntity> entityList)
         {
             using (var db = OpenConnection())
-            using (var transaction = db.BeginTransaction())
+            using (var transaction = new TransactionScope())
             {
                 foreach (var entity in entityList)
                 {
                     int result = db.Update<TEntity>(entity);
                 }
 
-                transaction.Commit();
+                transaction.Complete();
                 return entityList.Count();
             }
         }
@@ -135,14 +137,14 @@ namespace test.UI.Respository
         public int SaveOrUpdateTransaction(IEnumerable<TEntity> entityList)
         {
             using (var db = OpenConnection())
-            using (var transaction = db.BeginTransaction())
+            using (var transaction = new TransactionScope())
             {
                 foreach (var entity in entityList)
                 {
                     int result = db.InsertOrReplace<TEntity>(entity);
                 }
 
-                transaction.Commit();
+                transaction.Complete();
                 return entityList.Count();
             }
         }
@@ -152,7 +154,7 @@ namespace test.UI.Respository
             if (entityList == null || entityList.Count() <= 0) { return 0; }
 
             using (var db = OpenConnection())
-            using (var transaction = db.BeginTransaction())
+            using (var transaction = new TransactionScope())
             {
                 foreach (var entity in entityList)
                 {
@@ -160,12 +162,12 @@ namespace test.UI.Respository
 
                     if (result <= 0)
                     {
-                        db.RollbackTransaction();
+                        transaction.Dispose();
                         return 0;
                     }
                 }
 
-                transaction.Commit();
+                transaction.Complete();
 
                 return entityList.Count();
             }
