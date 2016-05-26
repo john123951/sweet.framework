@@ -26,10 +26,11 @@ namespace test.UI.Console.Installers
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             //string mysqlConnection = ConfigurationManager.ConnectionStrings["mysql_insurance"].ConnectionString;
+            //string providerName = ConfigurationManager.ConnectionStrings["mysql_insurance"].ProviderName;
 
             //container.Register(Component.For(typeof(IRepository<,>))
             //                .ImplementedBy(typeof(Linq2DbRepository<,>))
-            //                .DependsOn(Dependency.OnConfigValue("connectionString", mysqlConnection))
+            //                .DependsOn(Dependency.OnConfigValue("providerName", providerName), Dependency.OnConfigValue("connectionString", mysqlConnection))
             //                .LifestyleSingleton()
             //                );
 

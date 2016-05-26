@@ -1,6 +1,5 @@
 ﻿using LinqToDB;
 using LinqToDB.Data;
-using LinqToDB.DataProvider;
 using sweet.framework.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,12 +27,16 @@ namespace test.UI.Respository
     ///     Microsoft Sql Azure Microsoft Sql Server    Microsoft SqlCe     MySql
     ///     Oracle              PostgreSQL              SQLite              SAP HANA
     ///     Sybase ASE
+    ///
+    /// Example:
+    ///     <add name="mysql_insurance" connectionString="Server=localhost;Database=insurance;Uid=product;Pwd=shebao$;" providerName="MySql" />
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public class Linq2DbRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity, new()
     {
-        private readonly IDataProvider _dataProvider;
+        private readonly string _providerName;
         private readonly string _connectionString;
 
         static Linq2DbRepository()
@@ -45,20 +48,21 @@ namespace test.UI.Respository
         }
 
         public Linq2DbRepository(string connectionString)
-            : this(null, connectionString)
+            : this(ProviderName.MySql, connectionString)
         {
         }
 
-        public Linq2DbRepository(IDataProvider dataProvider, string connectionString)
+        // ProviderName.MySql
+        public Linq2DbRepository(string providerName, string connectionString)
         {
-            _dataProvider = dataProvider;
+            _providerName = providerName;
             _connectionString = connectionString;
         }
 
         protected DataConnection OpenConnection()
         {
             //var conn = LinqToDB.DataProvider.MySql.MySqlTools.CreateDataConnection(_connectionString);
-            var conn = _dataProvider == null ? new DataConnection(_connectionString) : new DataConnection(_dataProvider, _connectionString);
+            var conn = _providerName == null ? new DataConnection(_connectionString) : new DataConnection(_providerName, _connectionString);
 
             return conn;
         }
