@@ -15,17 +15,12 @@ namespace sweet.framework.Utility
             Fatal,
         }
 
-        private static LogUtility _instance;
-
         #region 构造函数
+
+        private static LogUtility _instance;
 
         private LogUtility()
         { }
-
-        static LogUtility()
-        {
-            LogUtility.Register();
-        }
 
         public static LogUtility GetInstance()
         {
@@ -40,6 +35,11 @@ namespace sweet.framework.Utility
 
         #region 注册
 
+        static LogUtility()
+        {
+            LogUtility.Register();
+        }
+
         public static void Register()
         {
             log4net.Config.BasicConfigurator.Configure();
@@ -53,6 +53,12 @@ namespace sweet.framework.Utility
         }
 
         #endregion 注册
+
+        public static void TraceOutput()
+        {
+            System.Diagnostics.Debug.Listeners.Add(new Log4netTraceListener());
+            System.Diagnostics.Trace.Listeners.Add(new Log4netTraceListener());
+        }
 
         public void WriteLog(string logName, LogType type, string message)
         {
@@ -196,5 +202,40 @@ namespace sweet.framework.Utility
                 logger.FatalFormat(msg, args);
             }
         }
+
+        #region 内部类
+
+        public class Log4netTraceListener : System.Diagnostics.TraceListener
+        {
+            private readonly log4net.ILog _log;
+
+            public Log4netTraceListener()
+            {
+                _log = log4net.LogManager.GetLogger("System.Diagnostics.Redirection");
+            }
+
+            public Log4netTraceListener(log4net.ILog log)
+            {
+                _log = log;
+            }
+
+            public override void Write(string message)
+            {
+                if (_log != null)
+                {
+                    _log.Debug(message);
+                }
+            }
+
+            public override void WriteLine(string message)
+            {
+                if (_log != null)
+                {
+                    _log.Debug(message);
+                }
+            }
+        }
+
+        #endregion 内部类
     }
 }

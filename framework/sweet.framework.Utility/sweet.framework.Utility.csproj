@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugUtility.cs" />
+    <Compile Include="Extention\AsyncExtensions.cs" />
     <Compile Include="Extention\ExpressionExtensions.cs" />
     <Compile Include="Extention\CollectionExtensions.cs" />
     <Compile Include="Extention\DateTimeExtensions.cs" />
